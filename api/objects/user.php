@@ -6,33 +6,40 @@ include_once '../libs/php-jwt-master/src/SignatureInvalidException.php';
 include_once '../libs/php-jwt-master/src/JWT.php';
 use \Firebase\JWT\JWT;
 
-
 class User {
     private $name_table = "user";
     private $conn;
+    private $path="../user-data/";
 
     public function __construct($db) {
         $this->conn = $db;
     }
-
-    public function Creat($first_name,$second_name,$email,$number,
+    public  function addImage($file, $id) {
+        $full_path=$this->path."user-".$id;
+        if(!file_exists($full_path)) {
+            mkdir('path/to/directory', 0777, true);
+        }
+        
+    }
+    public function creat($first_name,$second_name,$email,$number,
                             $date,$town,$password,$confirm_password) {
         if( empty($town)&&
             empty($number)&&
+            empty($date)&&
             empty($first_name)&&
             empty($second_name)&&
             empty($email)&&
             empty($password)) {
 
-            http_response_code(400);
-            echo json_encode(array("message" => "Empty text."));
-            return false;
-        }
+            return array(
+                "status" => "error",
+                "message" => "Empty text.");
+             }
 
-        if($password != $confirm_password){
-            http_response_code(400);
-            echo json_encode(array("message" => "Password mismatch."));
-            return false;
+        if($password != $confirm_password) {
+            return array(
+                "status" => "error",
+                "message" => "Password mismatch.");
         }
 
         $query="SELECT email FROM ".$this->name_table." WHERE email = ? ";
@@ -42,9 +49,9 @@ class User {
         $stmt->execute();
 
         if($stmt->rowCount()>0) {
-            http_response_code(400);
-            echo json_encode(array("message" => "this email already exists."));
-            return false;
+            return array(
+                "status" => "error",
+                "message" => "this email already exists.");
         }
 
         $query="INSERT INTO ".$this->name_table."
@@ -76,21 +83,23 @@ class User {
         $stmt->bindParam(":password", $password);
 
         if($stmt->execute()) {
-            http_response_code(200);
-            echo json_encode(array("message" => "Create success."));
-            return true;
+
+            return array(
+                "status" => "success",
+                "message" => "Create success.");
+
         }
-        http_response_code(400);
-        echo json_encode(array("message" => "Create error."));
-        return  false;
+        return array(
+            "status" => "error",
+            "message" => "Create error.");
     }
 
-    public function Sign_in($password,$email,$key,$iss,$aud,$iat,$nbf) {
+    public function signIn($password,$email,$key,$iss,$aud,$iat,$nbf) {
 
         if(empty($password) && empty($email)) {
-            http_response_code(400);
-            echo json_encode(array("message" => "Empty text.."));
-            return false;
+            return array(
+                "status" => "error",
+                "message" => "Empty text.");
         }
         $query="SELECT * FROM ".$this->name_table." WHERE email = ?";
         $stmt = $this->conn->prepare($query);
@@ -99,9 +108,9 @@ class User {
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         if(($stmt->rowCount() == 0) || !password_verify($password,$row["password"]) ) {
-            http_response_code(401);
-            echo json_encode(array("message" => "Incorrect email or passwords"));
-            return false;
+            return array(
+                "status" => "error",
+                "message" => "Incorrect email or passwords.");
         }
         http_response_code(201);
         $token = array(
@@ -120,35 +129,36 @@ class User {
             )
         );
         $jwt = JWT::encode($token, $key);
-        echo json_encode(
-            array(
-                "message" => "Успешный вход в систему.",
-                "jwt" => $jwt
-            ));
-        return true;
+        return array(
+            "status" => "success",
+            "message" => "login successful.",
+            "jwt" => $jwt);
     }
-    public  function  Validate($jwt, $key) {
+    public  function  validate($jwt, $key) {
         try {
             $decoded = JWT::decode($jwt, $key, array('HS256'));
-            http_response_code(200);
-
-            echo json_encode(array(
+            return array(
+                "status" => "success",
                 "message" => "Access is allowed.",
-                "data" => $decoded->data
-            ));
+                "jwt" => $decoded->data);
         }
-        catch (Exception $e){
+        catch (Exception $e) {
 
-            http_response_code(401);
-
-            echo json_encode(array(
-                "message" => "Access closed.",
-                "error" => $e->getMessage()
-            ));
+            return array(
+                "status" => "error",
+                "message" => $e->getMessage());
         }
     }
+    public function update($edit_name ,$edit_text ,$jwt) {
+    }
 
-    public function Sign_out() {
-
+    public function delete($id) {
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $id);
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
     }
 }
