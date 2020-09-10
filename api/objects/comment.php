@@ -65,7 +65,23 @@ class Comment {
                 "message" => "error creating comment"
             );
         }
-        if()
+        $user=new User($this->conn);
+        $user_data=$user->find($user_id);
+        mail($user_data["email"], "You comment", ('Date:'.$date." ".$text),
+            'From: testalph55@gmail.com');
+        if($parent_id != null) {
+            $query="SELECT user_id FROM ".$this->name_table." WHERE id =:parent_id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(":parent_id", $parent_id);
+            $stmt->execute();
+            if($stmt->rowCount()>0) {
+                $res=$stmt->fetch(PDO::FETCH_ASSOC);
+                $user_recipient=$user->find($res["user_id"]);
+                mail($user_recipient["email"], "Your comment was answered by",
+                    ('Who-'.$user_recipient["first_name"]." ".'Date:'.$date."text: ".$text),
+                    'From: testalph55@gmail.com');
+            }
+        }
         return array(
             "status" => "success",
             "text" => $text,
@@ -75,7 +91,30 @@ class Comment {
         );
     }
     function delete ($comment_id) {
+        $query="SELECT * FROM ".$this->name_table." WHERE parent_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $comment_id);
+        if (!$stmt->execute()) {
+            return array(
+                "status" => "error",
+                "message" => "1");
+        }
+        while($res=$stmt->fetch(PDO::FETCH_ASSOC)) {
 
+            $this->delete($res["id"]);
+        }
+
+        $sql = "DELETE FROM comments WHERE id =  :comment_id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":comment_id", $comment_id);
+        if ($stmt->execute()) {
+            return array(
+                "status" => "success",
+                "message" => "successfully deleted");
+        }
+        return array(
+            "status" => "error",
+            "message" => $stmt->error);
     }
     function update($comment_id, $user_id, $text) {
 

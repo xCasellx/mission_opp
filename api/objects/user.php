@@ -149,7 +149,22 @@ class User {
                 "message" => $e->getMessage());
         }
     }
-    public function update($edit_name ,$edit_text ,$jwt) {
+    public function update($edit_name ,$edit_text ,$jwt) {}
+    
+    public function find($id) {
+        if(empty($id)) {
+            return null;
+        }
+        $query="SELECT * FROM ".$this->name_table." WHERE id = ?";
+        $stmt =  $this->conn->prepare($query);
+        $stmt->bindParam(1, $id);
+        if(!$stmt->execute()){
+            return null;
+        }
+        if($stmt->rowCount() == 0) {
+            return null;
+        }
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function delete($id) {
