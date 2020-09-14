@@ -150,7 +150,7 @@ class User {
         }
     }
     public function update($edit_name ,$edit_text ,$jwt) {}
-    
+
     public function find($id) {
         if(empty($id)) {
             return null;

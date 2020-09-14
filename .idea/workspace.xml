@@ -20,10 +20,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="44678ede-d1ef-44cc-bcca-b44a972fba65" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/api/comment/delete.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/block/nav.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/cabinet.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/comment.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/script/authorization.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/script/cabinet.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/script/control.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/script/view.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/objects/comment.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/objects/comment.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/objects/user.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/objects/user.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/bg-body.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/bg.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/script/authorized.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/style/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/style/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,6 +72,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\web\OpenServer\domains\oop_site\script" />
       <recent name="D:\web\OpenServer\domains\oop_site\api" />
     </key>
   </component>
@@ -75,7 +86,8 @@
       <updated>1599480311348</updated>
       <workItem from="1599480317360" duration="44032000" />
       <workItem from="1599681908262" duration="762000" />
-      <workItem from="1599721335135" duration="14962000" />
+      <workItem from="1599721335135" duration="34314000" />
+      <workItem from="1599846505088" duration="19959000" />
     </task>
     <servers />
   </component>
@@ -92,32 +104,41 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="395" y="110" key="#Inspections" timestamp="1599640977898">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
     <state x="395" y="110" key="#Inspections/0.0.1536.864@0.0.1536.864" timestamp="1599640977898" />
-    <state x="361" y="90" key="#Intentions" timestamp="1599651433524">
+    <state x="361" y="90" key="#Intentions" timestamp="1599808715490">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state x="361" y="90" key="#Intentions/0.0.1536.864@0.0.1536.864" timestamp="1599651433524" />
+    <state x="361" y="90" key="#Intentions/0.0.1536.864@0.0.1536.864" timestamp="1599808715490" />
+    <state x="475" y="75" key="#PHP" timestamp="1599739866755">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="475" y="75" key="#PHP/0.0.1536.864@0.0.1536.864" timestamp="1599739866755" />
     <state x="194" y="273" key="#SQL_Dialects" timestamp="1599727521645">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
     <state x="194" y="273" key="#SQL_Dialects/0.0.1536.864@0.0.1536.864" timestamp="1599727521645" />
-    <state x="543" y="155" key="NewPhpClassDialog" timestamp="1599682030247">
+    <state x="543" y="155" key="NewPhpClassDialog" timestamp="1599846564350">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state x="543" y="155" key="NewPhpClassDialog/0.0.1536.864@0.0.1536.864" timestamp="1599682030247" />
-    <state x="604" y="355" key="NewPhpFileDialog" timestamp="1599735660239">
+    <state x="543" y="155" key="NewPhpClassDialog/0.0.1536.864@0.0.1536.864" timestamp="1599846564350" />
+    <state x="604" y="355" key="NewPhpFileDialog" timestamp="1599846821229">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state x="604" y="355" key="NewPhpFileDialog/0.0.1536.864@0.0.1536.864" timestamp="1599735660239" />
+    <state x="604" y="355" key="NewPhpFileDialog/0.0.1536.864@0.0.1536.864" timestamp="1599846821229" />
     <state x="590" y="203" key="refactoring.ChangeSignatureDialog" timestamp="1599571213452">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
     <state x="590" y="203" key="refactoring.ChangeSignatureDialog/0.0.1536.864@0.0.1536.864" timestamp="1599571213452" />
+    <state x="425" y="197" key="run.anything.popup" timestamp="1600073686304">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="425" y="197" key="run.anything.popup/0.0.1536.864@0.0.1536.864" timestamp="1600073686304" />
     <state x="431" y="181" width="672" height="678" key="search.everywhere.popup" timestamp="1599648705951">
       <screen x="0" y="0" width="1536" height="864" />
     </state>

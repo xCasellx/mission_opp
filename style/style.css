@@ -1,3 +1,17 @@
-.navbar{
-    background: rgba(5, 96, 165,0.9);
+body, main{
+    min-height: 90vh!important;
+}
+.form-check input{
+    width: 30vh;
+    margin-top: 10px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.border-auto{
+    border-radius: 60px !important;
+    border: 3px solid!important;
+}
+button:disabled{
+    background-color: #1c7430!important;
+    opacity: 1!important;
 }
