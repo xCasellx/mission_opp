@@ -3,6 +3,7 @@ include_once '../block/include_header.php';
 
 include_once '../config/data-base.php';
 include_once '../objects/user.php';
+include_once '../config/core.php';
 
 $database=new Database();
 $db = $database->getConnection();
@@ -10,7 +11,8 @@ $db = $database->getConnection();
 $user=new User($db);
 $data = json_decode(file_get_contents("php://input"));
 
-$res=$user->update($data->edit_name ,$data->edit_text ,$data->jwt);
+$user_data=$user->validate($data->jwt,$key);
+$res=$user->update($data->edit_name ,$data->edit_text ,$data->password,$data->confirm_password,$user_data["jwt"]->id,$key,$iss,$aud,$iat,$nbf);
 
 if($res["status"]==="error") {
     http_response_code(400);

@@ -13,12 +13,13 @@ $(document).on("submit","#login-form",function () {
         type : "POST",
         contentType : 'application/json',
         data : form_data,
+
         success : function(result){
             setCookie("jwt", result.jwt,2);
             $(location).attr('href',"../pages/cabinet.php");
         },
         error : function(result){
-            console.log(result.responseJSON.message);
+            console.log(result.responseJSON);
             printMessage("error",result.responseJSON.message);
         }
     })
@@ -84,25 +85,3 @@ function loginForm() {
     $("#register").attr('disabled', false);
 }
 
-function  printMessage(type,text) {
-    if("success" === type) {
-        $(".status-message").addClass("alert-success");
-    }
-    else if("error" === type) {
-        $(".status-message").addClass("alert-danger");
-    }
-    $(".status-message").text(text);
-}
-
-function  deleteMessage() {
-    $(".status-message").text("");
-    if($(".status-message").hasClass( "alert-danger" )) {
-        $(".status-message").removeClass( "alert-danger" );
-        return ;
-    }
-    if($(".status-message").hasClass( "alert-success" )) {
-        $(".status-message").removeClass( "alert-success" );
-        return ;
-    }
-
-}

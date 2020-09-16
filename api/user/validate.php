@@ -14,6 +14,8 @@ $data = json_decode(file_get_contents("php://input"));
 
 $res=$user->validate($data->jwt,$key);
 
+
+
 if($res["status"]==="error") {
     http_response_code(401);
     echo json_encode($res);

@@ -9,9 +9,7 @@
                     <strong>Register</strong>
                 </button>
             </div>
-            <div class="status-message text-center mt-2 p-2">
-
-            </div>
+            <div class="status-message d-none text-center  mt-2 p-2"></div>
             <div id="form" class="mt-0 pt-0">
             </div>
         </div>

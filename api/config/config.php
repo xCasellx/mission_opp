@@ -1,0 +1,2 @@
+<?
+define("URL", "http://oop/");

@@ -1,5 +1,5 @@
 <?php
-
+include_once '../config/config.php';
 include_once '../libs/php-jwt-master/src/BeforeValidException.php';
 include_once '../libs/php-jwt-master/src/ExpiredException.php';
 include_once '../libs/php-jwt-master/src/SignatureInvalidException.php';
@@ -9,16 +9,39 @@ use \Firebase\JWT\JWT;
 class User {
     private $name_table = "user";
     private $conn;
-    private $path="../user-data/";
 
     public function __construct($db) {
         $this->conn = $db;
     }
-    public  function addImage($file, $id) {
-        $full_path=$this->path."user-".$id;
-        if(!file_exists($full_path)) {
-            mkdir('path/to/directory', 0777, true);
+    public  function updateImage($file, $id,$key,$iss,$aud,$iat,$nbf) {
+        $fold_name="user-".$id;
+        $fold="../user-data/user-".$id;
+        if(!file_exists($fold)) {
+            mkdir($fold, 0777, true);
         }
+        $tmp_name = $file["tmp_name"];
+        $full_path_image= $fold."/user-imag.jpg";
+        move_uploaded_file($tmp_name, $full_path_image);
+        $query="UPDATE ".$this->name_table." SET image = :image WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":image", $fold_name);
+        $stmt->bindParam(":id", $id);
+
+        if($stmt->execute()) {
+            $query="SELECT * FROM ".$this->name_table." WHERE id = ?";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(1, $id);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $jwt=$this->createJWT($key,$iss,$aud,$iat,$nbf,$row);
+            return array(
+                "status" => "success",
+                "image" => (URL."/api/user-data/".$fold_name."/user-imag.jpg"),
+                "jwt" => $jwt);
+        }
+        return array(
+            "status" => "error",
+            "message" => "Error update.".json_encode($stmt->errorInfo()));
         
     }
     public function creat($first_name,$second_name,$email,$number,
@@ -112,23 +135,7 @@ class User {
                 "status" => "error",
                 "message" => "Incorrect email or passwords.");
         }
-        http_response_code(201);
-        $token = array(
-            "iss" => $iss,
-            "aud" => $aud,
-            "iat" => $iat,
-            "nbf" => $nbf,
-            "data" => array(
-                "id" => $row["id"],
-                "first_name" => $row["first_name"],
-                "second_name" => $row["second_name"],
-                "email" => $email,
-                "date" => $row["date"],
-                "number" => $row["number"],
-                "town" => $row["town"],
-            )
-        );
-        $jwt = JWT::encode($token, $key);
+        $jwt=$this->createJWT($key,$iss,$aud,$iat,$nbf,$row);
         return array(
             "status" => "success",
             "message" => "login successful.",
@@ -143,14 +150,108 @@ class User {
                 "jwt" => $decoded->data);
         }
         catch (Exception $e) {
-
             return array(
                 "status" => "error",
                 "message" => $e->getMessage());
         }
     }
-    public function update($edit_name ,$edit_text ,$jwt) {}
-
+    public function update($edit_name ,$edit_text ,$password, $confirm_password,$id,$key,$iss,$aud,$iat,$nbf) {
+        if(empty($edit_text) && empty($edit_name)) {
+            return array(
+                "status" => "error",
+                "message" => "Empty text.");
+        }
+        switch ($edit_name) {
+            case "email":
+                $query="SELECT * FROM ".$this->name_table." WHERE email = ?";
+                $stmt = $this->conn->prepare($query);
+                $edit_text=htmlspecialchars(strip_tags($edit_text));
+                $stmt->bindParam(1, $edit_text);
+                $stmt->execute();
+                if($stmt->rowCount()>0) {
+                    return array(
+                        "status" => "error",
+                        "message" => "This email already exists.");
+                }
+                break;
+            case "date":
+                $temp_date = strtotime($edit_text);
+                $temp_upd=strtotime((date('Y')-5).date('-m-d'));
+                if($temp_date > $temp_upd) {
+                    return array(
+                        "status" => "error",
+                        "message" => "Wrong date.");
+                }
+                break;
+            case "password":
+                if(empty($password) && empty($confirm_password)){
+                    return array(
+                        "status" => "error",
+                        "message" => "Empty password");
+                }
+                $query="SELECT * FROM ".$this->name_table." WHERE id = ?";
+                $stmt = $this->conn->prepare($query);
+                $stmt->bindParam(1, $id);
+                $stmt->execute();
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                if(!password_verify($password,$row["password"])) {
+                    return array(
+                        "status" => "error",
+                        "message" => "Incorrect passwords.");
+                }
+                if($edit_text !== $confirm_password){
+                    if(!password_verify($password,$row["password"])) {
+                        return array(
+                            "status" => "error",
+                            "message" => "Password mismatch.");
+                    }
+                }
+                $edit_text=password_hash($edit_text,PASSWORD_BCRYPT);
+                break;
+            default:
+                $edit_text=htmlspecialchars(strip_tags($edit_text));
+                break;;
+        }
+        $component=htmlspecialchars(strip_tags($edit_name));
+        $query="UPDATE ".$this->name_table." SET ".$component." = :text WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $text=htmlspecialchars(strip_tags($edit_text));
+        $stmt->bindParam(":text", $text);
+        $stmt->bindParam(":id", $id);
+        if($stmt->execute()) {
+            $query="SELECT * FROM ".$this->name_table." WHERE id = ?";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(1, $id);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $jwt=$this->createJWT($key,$iss,$aud,$iat,$nbf,$row);
+            return array(
+                "status" => "success",
+                "jwt" => $jwt);
+        }
+        return array(
+            "status" => "error",
+            "message" => "Error update.".json_encode($stmt->errorInfo()));
+    }
+    public  function createJWT($key,$iss,$aud,$iat,$nbf,$row){
+        $token = array(
+            "iss" => $iss,
+            "aud" => $aud,
+            "iat" => $iat,
+            "nbf" => $nbf,
+            "data" => array(
+                "id" => $row["id"],
+                "first_name" => $row["first_name"],
+                "second_name" => $row["second_name"],
+                "email" => $row["email"],
+                "date" => $row["date"],
+                "number" => $row["number"],
+                "town" => $row["town"],
+                "image" => (URL."/api/user-data/".$row["image"]."/user-imag.jpg"),
+            )
+        );
+        return JWT::encode($token, $key);
+    }
     public function find($id) {
         if(empty($id)) {
             return null;

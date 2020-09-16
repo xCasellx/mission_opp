@@ -1,5 +1,3 @@
-
-
 function setCookie(cname, cvalue, days) {
     let d = new Date();
     d.setTime(d.getTime() + (days*24*60*60*1000));
@@ -17,7 +15,7 @@ function getCookie(cname) {
     }
 }
 
-$.fn.serializeObject = function(){
+$.fn.serializeObject = function() {
     var o = {};
     var a = this.serializeArray();
     $.each(a, function() {
@@ -38,4 +36,30 @@ function maxDate (year) {
     d.setTime(d.getTime());
     let s=(d.getFullYear()-year)+"-12-01";
     return s;
+}
+
+function  printMessage(type,text) {
+    $(".status-message").removeClass( "d-none" );
+    if("success" === type) {
+        $(".status-message").addClass("alert-success");
+    }
+    else if("error" === type) {
+        $(".status-message").addClass("alert-danger");
+    }
+    $(".status-message").text(text);
+    setTimeout(deleteMessage,5000);
+}
+
+function  deleteMessage() {
+    $(".status-message").addClass( "d-none" );
+    $(".status-message").text("");
+    if($(".status-message").hasClass( "alert-danger" )) {
+        $(".status-message").removeClass( "alert-danger" );
+        return ;
+    }
+    if($(".status-message").hasClass( "alert-success" )) {
+        $(".status-message").removeClass( "alert-success" );
+        return ;
+    }
+
 }
