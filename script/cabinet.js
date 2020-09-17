@@ -19,7 +19,9 @@ $(document).ready(function () {
                 $("#user_date").text(result.jwt.date);
                 $("#user_town").text(result.jwt.town);
                 $("#user_email").text(result.jwt.email);
-                $("#user-image").attr("src",checkImage(result.jwt.image));
+                checkImage(result.jwt.image,"#user-image");
+
+
             },
             error : function(result){
                 console.log(result.responseJSON.message);

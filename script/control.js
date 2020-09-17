@@ -64,14 +64,16 @@ function  deleteMessage() {
 
 }
 
-function checkImage(image_path) {
+function checkImage(image_path,component) {
     if(image_path !== null){
         $.ajax(image_path, {
+            method: "HEAD",
             success: function() {
-                return image_path;
+                $(component).attr("src",image_path);
             },
-            method: "HEAD"
+            error: function (){
+                $(component).attr("src","/api/image/nan.png");
+            }
         });
     }
-    return "/api/image/nan.png";
 }

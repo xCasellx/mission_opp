@@ -23,11 +23,12 @@ $(document).on("submit","#form-comment",function () {
 })
 
 function PrintComment(comment){
+    let img = (comment.user.image !== null)? comment.user.image : "/api/image/nan.png"
     let html =`
                 <div class='card p-0'>
                     <div class=' p-1 card-header bg-dark text-light row' >
                         <div class='col-1 p-0' style='max-width: 32px'>
-                            <img class='rounded  img-fluid img' src='`+checkImage(comment.user.image)+`' style='width: 32px;height: 32px;' alt=''>
+                            <img class='rounded  img-fluid img' src='`+img+`' style='width: 32px;height: 32px;' alt=''>
                         </div>
                         <h6 class='col '>`+comment.user.first_name+` `+comment.user.second_name+`</h6>
                         <small class='col text-right'>`+comment.date +`</small>

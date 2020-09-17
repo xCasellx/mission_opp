@@ -247,7 +247,7 @@ class User {
                 "date" => $row["date"],
                 "number" => $row["number"],
                 "town" => $row["town"],
-                "image" => (URL."/api/user-data/".$row["image"]."/user-imag.jpg"),
+                "image" => ($row["image"] != null)? URL."/api/user-data/".$row["image"]."/user-imag.jpg": null,
             )
         );
         return JWT::encode($token, $key);

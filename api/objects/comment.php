@@ -33,7 +33,7 @@ class Comment {
                 "user" => array(
                     "first_name"=>$res["first_name"],
                     "second_name"=>$res["second_name"],
-                    "image"=>(URL."/api/user-data/".$res["image"]."/user-imag.jpg")
+                    "image"=>($res["image"] != null)? URL."/api/user-data/".$res["image"]."/user-imag.jpg": null
                 )
             )) ;
         }
