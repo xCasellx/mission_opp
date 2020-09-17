@@ -21,8 +21,11 @@
   <component name="ChangeListManager">
     <list default="true" id="44678ede-d1ef-44cc-bcca-b44a972fba65" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/comment/creat.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/comment/creat.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/comment/load.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/comment/load.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/objects/comment.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/objects/comment.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/objects/user.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/objects/user.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/comment.php" beforeDir="false" afterPath="$PROJECT_DIR$/pages/comment.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/script/cabinet.js" beforeDir="false" afterPath="$PROJECT_DIR$/script/cabinet.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/script/comments.js" beforeDir="false" afterPath="$PROJECT_DIR$/script/comments.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/script/control.js" beforeDir="false" afterPath="$PROJECT_DIR$/script/control.js" afterDir="false" />
@@ -80,7 +83,7 @@
       <workItem from="1599681908262" duration="762000" />
       <workItem from="1599721335135" duration="34314000" />
       <workItem from="1599846505088" duration="40322000" />
-      <workItem from="1600167087630" duration="40623000" />
+      <workItem from="1600167087630" duration="49944000" />
     </task>
     <servers />
   </component>
@@ -139,16 +142,5 @@
       <screen x="0" y="0" width="1536" height="864" />
     </state>
     <state x="431" y="181" width="672" height="678" key="search.everywhere.popup/0.0.1536.864@0.0.1536.864" timestamp="1600261529287" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/api/objects/comment.php</url>
-          <line>62</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

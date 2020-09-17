@@ -116,7 +116,6 @@ class User {
             "status" => "error",
             "message" => "Create error.");
     }
-
     public function signIn($password,$email,$key,$iss,$aud,$iat,$nbf) {
 
         if(empty($password) && empty($email)) {
@@ -267,7 +266,6 @@ class User {
         }
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-
     public function delete($id) {
         $query = "DELETE FROM " . $this->table_name . " WHERE id = ?";
         $stmt = $this->conn->prepare($query);

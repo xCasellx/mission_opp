@@ -64,6 +64,12 @@ function  deleteMessage() {
 
 }
 
+$("#sign-out").on("click",function() {
+    setCookie("jwt","",-1);
+    $(location).attr('href',"../");
+});
+
+
 function checkImage(image_path,component) {
     if(image_path !== null){
         $.ajax(image_path, {

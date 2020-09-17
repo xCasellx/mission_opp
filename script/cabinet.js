@@ -31,10 +31,6 @@ $(document).ready(function () {
     }
 });
 
-$("#sign-out").on("click",function() {
-    setCookie("jwt","",-1);
-    $(location).attr('href',"../");
-});
 
 
 $(document).on("click","#open-edit-data",function () {

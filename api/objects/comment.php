@@ -1,6 +1,6 @@
 <?php
-include "user.php";
 include_once '../config/config.php';
+include_once '../objects/user.php';
 
 class Comment {
     private $name_table = "comments";
@@ -40,8 +40,8 @@ class Comment {
         return $comments;
 
     }
-    function create($user_id, $text ,$parent_id) {
-        if(empty($user_id)&&empty($text)) {
+    function create($user, $text ,$parent_id) {
+        if(empty($text)) {
             return array(
                 "status" => "error",
                 "message" => "empty text."
@@ -59,16 +59,15 @@ class Comment {
         $stmt->bindParam(":date", $date);
         $stmt->bindParam(":text", $text);
         $stmt->bindParam(":parent_id", $parent_id);
-        $stmt->bindParam(":user_id", $user_id);
+        $stmt->bindParam(":user_id", $user->id);
         if(!$stmt->execute()) {
             return array(
                 "status" => "error",
                 "message" => "error creating comment"
             );
         }
-        $user=new User($this->conn);
-        $user_data=$user->find($user_id);
-        mail($user_data["email"], "You comment", ('Date:'.$date." ".$text),
+        $id =$this->conn->lastInsertId();
+        mail($user->email, "You comment", ('Date:'.$date." ".$text),
             'From: testalph55@gmail.com');
         if($parent_id != null) {
             $query="SELECT user_id FROM ".$this->name_table." WHERE id =:parent_id";
@@ -77,18 +76,25 @@ class Comment {
             $stmt->execute();
             if($stmt->rowCount()>0) {
                 $res=$stmt->fetch(PDO::FETCH_ASSOC);
-                $user_recipient=$user->find($res["user_id"]);
-                mail($user_recipient["email"], "Your comment was answered by",
-                    ('Who-'.$user_recipient["first_name"]." ".'Date:'.$date."text: ".$text),
+                $user_recipient = new User($this->conn);
+                $email_recipient=$user_recipient->find($res["user_id"]);
+                mail( $email_recipient["email"], "Your comment was answered by",
+                    ('Who-'. $email_recipient["first_name"]." ".'Date:'.$date."text: ".$text),
                     'From: testalph55@gmail.com');
             }
         }
         return array(
             "status" => "success",
-            "text" => $text,
-            "user_id" => $user_id,
+            "id" => $id,
             "parent_id" => $parent_id,
-            "date" => $date
+            "user_id" => $user->id,
+            "date" => $date,
+            "text" => $text,
+            "user" => array(
+                "first_name"=>$user->first_name,
+                "second_name"=>$user->second_name,
+                "image"=>$user->image
+            )
         );
     }
     function delete ($comment_id) {
