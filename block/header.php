@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="../script/bootstrap/bootstrap.js"></script>
+    <script src="../script/control.js"></script>
     <link rel="stylesheet" href="/style/bootstrap/bootstrap.min.css"  type="text/css">
 </haed>
 <body class="">

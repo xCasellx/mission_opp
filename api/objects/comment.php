@@ -1,5 +1,6 @@
 <?php
 include "user.php";
+include_once '../config/config.php';
 
 class Comment {
     private $name_table = "comments";
@@ -32,7 +33,7 @@ class Comment {
                 "user" => array(
                     "first_name"=>$res["first_name"],
                     "second_name"=>$res["second_name"],
-                    "image"=>$res["image"]
+                    "image"=>(URL."/api/user-data/".$res["image"]."/user-imag.jpg")
                 )
             )) ;
         }

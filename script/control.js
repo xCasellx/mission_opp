@@ -63,3 +63,15 @@ function  deleteMessage() {
     }
 
 }
+
+function checkImage(image_path) {
+    if(image_path !== null){
+        $.ajax(image_path, {
+            success: function() {
+                return image_path;
+            },
+            method: "HEAD"
+        });
+    }
+    return "/api/image/nan.png";
+}
