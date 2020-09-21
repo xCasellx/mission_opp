@@ -9,6 +9,7 @@ class Comment {
     public function __construct($db) {
         $this->conn = $db;
     }
+
     function read() {
         $comments = array();
         $user = new User($this->conn);
@@ -41,6 +42,7 @@ class Comment {
         return $comments;
 
     }
+
     function create($user, $text ,$parent_id) {
         if(empty($text)) {
             return array(
@@ -98,11 +100,13 @@ class Comment {
             )
         );
     }
+
     function delete ($comment_id,$user_id) {
         if(empty($comment_id)){
             return array(
                 "status" => "error",
-                "message" => "not delete id empty");
+                "message" => "not delete id empty"
+            );
         }
         if($user_id !== "parent") {
             $query = "SELECT * FROM " . $this->name_table . " WHERE id = ? AND user_id = ?";
@@ -113,7 +117,8 @@ class Comment {
             if($stmt->rowCount() <= 0) {
                 return array(
                     "status" => "error",
-                    "message" => "not deleted");
+                    "message" => "not deleted"
+                );
             }
         }
         $query = "SELECT * FROM " . $this->name_table . " WHERE parent_id = ?";
@@ -122,7 +127,8 @@ class Comment {
         if ( !$stmt->execute() ) {
             return array(
                 "status" => "error",
-                "message" => "not delete");
+                "message" => "not delete"
+            );
         }
         while($res = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
@@ -135,17 +141,21 @@ class Comment {
         if ($stmt->execute()) {
             return array(
                 "status" => "success",
-                "message" => "successfully deleted");
+                "message" => "successfully deleted"
+            );
         }
         return array(
             "status" => "error",
-            "message" => $stmt->error);
+            "message" => $stmt->error
+        );
     }
+
     function update($comment_id, $user_id, $text) {
         if(empty($comment_id)&& empty($text)){
             return array(
                 "status" => "error",
-                "message" => "empty text");
+                "message" => "empty text"
+            );
         }
         $query = "UPDATE " . $this->name_table . " SET text = :text , edit_check = 1 WHERE id = :id AND user_id = :user_id";
         $stmt = $this->conn->prepare($query);
@@ -156,11 +166,13 @@ class Comment {
         if($stmt->execute()) {
             return array(
                 "status" => "success",
-                "message" => "success update");
+                "message" => "success update"
+            );
         }
         return array(
             "status" => "error",
-            "message" => "error update");
+            "message" => "error update"
+        );
 
     }
 }

@@ -4,15 +4,19 @@ include_once '../libs/php-jwt-master/src/BeforeValidException.php';
 include_once '../libs/php-jwt-master/src/ExpiredException.php';
 include_once '../libs/php-jwt-master/src/SignatureInvalidException.php';
 include_once '../libs/php-jwt-master/src/JWT.php';
+
 use \Firebase\JWT\JWT;
 
 class User {
+
     private $name_table = "user";
     private $conn;
     private $pattern_password = '/(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*_]{6,}/';
+
     public function __construct($db) {
         $this->conn = $db;
     }
+
     public  function updateImage($file, $id, $key, $iss, $aud, $iat, $nbf) {
         $fold_name = "user-".$id;
         $fold = "../user-data/user-" . $id;
@@ -37,15 +41,18 @@ class User {
             return array(
                 "status" => "success",
                 "image" => (URL . "/api/user-data/" . $fold_name . "/user-imag.jpg"),
-                "jwt" => $jwt);
+                "jwt" => $jwt
+            );
         }
         return array(
             "status" => "error",
             "message" => "Error update." . json_encode($stmt->errorInfo()));
         
     }
-    public function creat($first_name, $second_name, $email, $number,
-                            $date, $town, $password, $confirm_password) {
+
+    public function creat(
+        $first_name, $second_name, $email, $number,
+        $date, $town, $password, $confirm_password) {
         if( empty($town)&&
             empty($number)&&
             empty($date)&&
@@ -56,19 +63,22 @@ class User {
 
             return array(
                 "status" => "error",
-                "message" => "Empty text.");
+                "message" => "Empty text."
+            );
              }
         if(!preg_match($this->pattern_password, $password)) {
             return array(
                 "status" => "error",
                 "message" => "The password must be at least 6 or more.
                               Password must consist of letters of the Latin alphabet (A-z),
-                              numbers (0-9) and special characters.");
+                              numbers (0-9) and special characters."
+            );
         }
         if($password != $confirm_password) {
             return array(
                 "status" => "error",
-                "message" => "Password mismatch.");
+                "message" => "Password mismatch."
+            );
         }
 
         $query = "SELECT email FROM " . $this->name_table . " WHERE email = ? ";
@@ -80,7 +90,8 @@ class User {
         if($stmt->rowCount() > 0) {
             return array(
                 "status" => "error",
-                "message" => "this email already exists.");
+                "message" => "this email already exists."
+            );
         }
 
         $query = "INSERT INTO " . $this->name_table . "
@@ -115,12 +126,14 @@ class User {
 
             return array(
                 "status" => "success",
-                "message" => "Create success.");
+                "message" => "Create success."
+            );
 
         }
         return array(
             "status" => "error",
-            "message" => "Create error.");
+            "message" => "Create error."
+        );
     }
     public function signIn($password, $email, $key, $iss, $aud, $iat, $nbf) {
 
@@ -146,26 +159,32 @@ class User {
             "message" => "login successful.",
             "jwt" => $jwt);
     }
+
     public  function  validate($jwt, $key) {
         try {
             $decoded = JWT::decode($jwt, $key, array('HS256'));
             return array(
                 "status" => "success",
                 "message" => "Access is allowed.",
-                "jwt" => $decoded->data);
+                "jwt" => $decoded->data
+            );
         }
         catch (Exception $e) {
             return array(
                 "status" => "error",
-                "message" => $e->getMessage());
+                "message" => $e->getMessage()
+            );
         }
     }
-    public function update($edit_name ,$edit_text ,$password, $confirm_password,
-                           $id, $key, $iss, $aud, $iat, $nbf) {
+
+    public function update(
+        $edit_name ,$edit_text ,$password, $confirm_password,
+        $id, $key, $iss, $aud, $iat, $nbf) {
         if(empty($edit_text) && empty($edit_name)) {
             return array(
                 "status" => "error",
-                "message" => "Empty text.");
+                "message" => "Empty text."
+            );
         }
         switch ($edit_name) {
             case "email":
@@ -177,7 +196,8 @@ class User {
                 if($stmt->rowCount() > 0) {
                     return array(
                         "status" => "error",
-                        "message" => "This email already exists.");
+                        "message" => "This email already exists."
+                    );
                 }
                 break;
             case "date":
@@ -186,7 +206,8 @@ class User {
                 if($temp_date > $temp_upd) {
                     return array(
                         "status" => "error",
-                        "message" => "Wrong date.");
+                        "message" => "Wrong date."
+                    );
                 }
                 break;
             case "password":
@@ -194,14 +215,16 @@ class User {
                 if(empty($password) && empty($confirm_password)){
                     return array(
                         "status" => "error",
-                        "message" => "Empty password");
+                        "message" => "Empty password"
+                    );
                 }
                 if(!preg_match($this->pattern_password, $edit_text)) {
                     return array(
                         "status" => "error",
                         "message" => "The password must be at least 6 or more.
                               Password must consist of letters of the Latin alphabet (A-z),
-                              numbers (0-9) and special characters.");
+                              numbers (0-9) and special characters."
+                    );
                 }
 
                 $query = "SELECT * FROM " . $this->name_table . " WHERE id = ?";
@@ -212,13 +235,15 @@ class User {
                 if(!password_verify($password, $row["password"])) {
                     return array(
                         "status" => "error",
-                        "message" => "Incorrect passwords.");
+                        "message" => "Incorrect passwords."
+                    );
                 }
                 if($edit_text !== $confirm_password){
                     if(!password_verify($password, $row["password"])) {
                         return array(
                             "status" => "error",
-                            "message" => "Password mismatch.");
+                            "message" => "Password mismatch."
+                        );
                     }
                 }
                 $edit_text = password_hash($edit_text, PASSWORD_BCRYPT);
@@ -242,12 +267,14 @@ class User {
             $jwt = $this->createJWT($key, $iss, $aud, $iat, $nbf, $row);
             return array(
                 "status" => "success",
-                "jwt" => $jwt);
+                "jwt" => $jwt
+            );
         }
         return array(
             "status" => "error",
             "message" => "Error update." . $stmt->errorInfo());
     }
+
     public  function createJWT($key, $iss, $aud, $iat, $nbf, $row){
         $token = array(
             "iss" => $iss,
@@ -267,6 +294,7 @@ class User {
         );
         return JWT::encode($token, $key);
     }
+
     public function find($id) {
         if(empty($id)) {
             return null;
@@ -282,6 +310,7 @@ class User {
         }
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
     public function delete($id) {
         $query = "DELETE FROM " . $this->table_name . " WHERE id = ?";
         $stmt = $this->conn->prepare($query);

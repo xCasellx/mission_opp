@@ -10,8 +10,7 @@
                 </button>
             </div>
            <div class="text-center  mt-2 p-2 d-none status-message"></div>
-            <div id="form" class="mt-0 pt-0">
-            </div>
+            <div id="form" class="mt-0 pt-0"></div>
         </div>
     </main>
     <script src="script/control.js"></script>
