@@ -1,13 +1,13 @@
 $("html").ready(function () {
-   if(getCookie("jwt")!== undefined){
+   if(getCookie("jwt") !== undefined){
        $(location).attr('href',"../pages/cabinet.php");
        return false;
    }
     loginForm();
 });
 
-$(document).on("submit","#login-form",function () {
-    let form_data=JSON.stringify($(this).serializeObject());
+$(document).on("submit", "#login-form", function () {
+    let form_data = JSON.stringify($(this).serializeObject());
     $.ajax({
         url: "../api/user/login.php",
         type : "POST",
@@ -26,19 +26,18 @@ $(document).on("submit","#login-form",function () {
     return false;
 });
 
-$(document).on("submit","#register-form",function () {
-    let form_data=JSON.stringify($(this).serializeObject());
+$(document).on("submit", "#register-form", function () {
+    let form_data = JSON.stringify($(this).serializeObject());
     $.ajax({
         url: "../api/user/create.php",
         type : "POST",
         contentType : 'application/json',
         data : form_data,
-        success : function(result){
+        success : function(result) {
             loginForm();
             printMessage("success",result.message);
         },
-        error : function(result){
-            console.log(result.responseJSON.message);
+        error : function(result) {
             printMessage("error",result.responseJSON.message);
         }
     })
@@ -46,9 +45,9 @@ $(document).on("submit","#register-form",function () {
 });
 
 
-$("#sign-in").on("click",loginForm);
+$("#sign-in").on("click", loginForm);
 
-$("#register").on("click",function() {
+$("#register").on("click", function() {
     deleteMessage();
     $("#sign-in").attr('disabled', false);
     $("#register").attr('disabled', true);

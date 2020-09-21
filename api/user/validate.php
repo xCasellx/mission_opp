@@ -5,18 +5,18 @@ include_once '../config/data-base.php';
 include_once '../objects/user.php';
 include_once '../config/core.php';
 
-$database=new Database();
+$database = new Database();
 $db = $database->getConnection();
 
-$user=new User($db);
+$user = new User($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
-$res=$user->validate($data->jwt,$key);
+$res = $user->validate($data->jwt, $key);
 
 
 
-if($res["status"]==="error") {
+if($res["status"] === "error") {
     http_response_code(401);
     echo json_encode($res);
     exit;

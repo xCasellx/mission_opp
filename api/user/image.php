@@ -14,13 +14,13 @@ if(empty($_FILES)) {
 }
 
 
-$database=new Database();
+$database = new Database();
 $db = $database->getConnection();;
 $user = new User($db);
-$user_data=$user->validate($_POST["jwt"],$key);
-$res=$user->updateImage($_FILES["image"],$user_data["jwt"]->id,$key,$iss,$aud,$iat,$nbf);
+$user_data = $user->validate($_POST["jwt"], $key);
+$res = $user->updateImage($_FILES["image"], $user_data["jwt"]->id, $key, $iss, $aud, $iat, $nbf);
 
-if($res["status"]==="error") {
+if($res["status"] === "error") {
     http_response_code(400);
     echo json_encode($res);
     exit;

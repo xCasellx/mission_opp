@@ -1,11 +1,12 @@
 <?php   require_once "../block/header.php";
         require_once "../block/nav.php"?>;
+    <script src="../script/user_data.js"></script>
     <main class="bg-light container p-5">
         <div class="card ">
             <div class="text-center container  card-header"><strong>User information</strong></div>
             <div class="row card-body ">
-                <div class="col">
-                    <img class="rounded  img-fluid img" id="user-image" src="/api/image/nan.png" style="width: 480px;height: 480px;" alt="">
+                <div class="col" style="">
+                    <img class="rounded img-fluid w-100 img" id="user-image" src="/api/image/nan.png"  alt="">
                 </div>
                 <div class="col border-left border-dark">
                     <div class="col border-left border-dark">
@@ -46,6 +47,6 @@
             </div>
         </div>
     </main>
-    <script src="../script/cabinet.js"></script>
 
+    <script src="../script/cabinet.js"></script>
 <?php require_once "../block/footer.php"?>

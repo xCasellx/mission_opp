@@ -1,37 +1,12 @@
-$("html").ready(function () {
-    if(getCookie("jwt") === undefined){
-        $(location).attr('href',"../");
-    }
+$(document).on("load_data", function () {
+    $("#user_first_name").text(first_name);
+    $("#user_second_name").text(second_name);
+    $("#user_number").text(number);
+    $("#user_date").text(date);
+    $("#user_town").text(town);
+    $("#user_email").text(email);
+    checkImage(image, "#user-image");
 });
-
-$(document).ready(function () {
-    let jwt=getCookie("jwt");
-    if(jwt !== undefined) {
-        $.ajax({
-            url: "../api/user/validate.php",
-            type : "POST",
-            contentType : 'application/json',
-            data : JSON.stringify({ jwt:jwt }),
-            success : function(result){
-                $("#user_first_name").text(result.jwt.first_name);
-                $("#user_second_name").text(result.jwt.second_name);
-                $("#user_number").text(result.jwt.number);
-                $("#user_date").text(result.jwt.date);
-                $("#user_town").text(result.jwt.town);
-                $("#user_email").text(result.jwt.email);
-                checkImage(result.jwt.image,"#user-image");
-
-
-            },
-            error : function(result){
-                console.log(result.responseJSON.message);
-            }
-        })
-
-    }
-});
-
-
 
 $(document).on("click","#open-edit-data",function () {
     $(".edit-data").toggleClass("d-none");
@@ -42,11 +17,8 @@ $(document).on("click","#open-edit-data",function () {
     else {
         $("#open-edit-data").text("Edit");
     }
-
 });
 let edit_component;
-
-
 
 $(".edit-data").on("click",function (){
     let html = `  <div class="container" align="center">
@@ -60,47 +32,40 @@ $(".edit-data").on("click",function (){
     $(".modal-body").html(html);
 })
 
-$("#edit-second_name").on("click",function () {
+$("#edit-second_name").on("click", function () {
     edit_component = $(this).attr('id').replace("edit-","");
-    let content=$("#user_"+edit_component).text();
     let html=`<input required type="text" class="form-control border-dark border input-text input-edit" 
-              id="input-second_name" name="edit_text" placeholder='`+content+`'">`
+              id="input-second_name" name="edit_text" placeholder='` +second_name+ `'">`
     $("#form-content").html(html);
     $(".modal-title").text("Edit second name");
 });
-$("#edit-first_name").on("click",function () {
-    edit_component = $(this).attr('id').replace("edit-","");
-    let content=$("#user_"+edit_component).text();
+$("#edit-first_name").on("click", function () {
+    edit_component = $(this).attr('id').replace("edit-", "");
     let html=`<input required type="text" class="form-control border-dark border input-text input-edit" 
-              id="input-first_name" name="edit_text" placeholder='`+content+`'">`
+              id="input-first_name" name="edit_text" placeholder='` +first_name+ `'">`
     $("#form-content").html(html);
     $(".modal-title").text("Edit first name");
 });
-$("#edit-number").on("click",function () {
-    edit_component = $(this).attr('id').replace("edit-","");
-    let content=$("#user_"+edit_component).text();
+$("#edit-number").on("click", function () {
+    edit_component = $(this).attr('id').replace("edit-", "");
     let html=`<input required type="text" name="edit_text"  class="form-control border-dark border input-text input-edit" 
-              id="input-number" placeholder='`+content+`' pattern="[0-9]{10,15}">`
+              id="input-number" placeholder='` +number+ `' pattern="[0-9]{10,15}">`
     $("#form-content").html(html);
     $(".modal-title").text("Edit number");
 });
 
-
 $("#edit-date").on("click",function () {
-    edit_component = $(this).attr('id').replace("edit-","");
-    let content=$("#user_"+edit_component).text();
+    edit_component = $(this).attr('id').replace("edit-", "");
     let html=`<input required type="date" name="edit_text"  class="form-control border-dark border input-text input-edit" 
-             value="`+content+`" id="input-date" max='`+maxDate(8)+`'">`
+             value="`+date+`" id="input-date" max='` +maxDate(8)+ `'">`
     $("#form-content").html(html);
     $(".modal-title").text("Edit date");
 });
 
-
 $("#edit-town").on("click",function () {
     edit_component = $(this).attr('id').replace("edit-","");
-    let content=$("#user_"+edit_component).text();
     let html=`<input required type="text" name="edit_text" class="form-control border-dark border input-text input-edit" 
-              id="input-town" placeholder='`+content+`'">`
+              id="input-town" placeholder='`+town+`'">`
     $("#form-content").html(html);
     $(".modal-title").text("Edit town");
 });
@@ -108,18 +73,17 @@ $("#edit-town").on("click",function () {
 
 $("#edit-email").on("click",function () {
     edit_component = $(this).attr('id').replace("edit-","");
-    let content=$("#user_"+edit_component).text();
     let html=`<input required type="email" name="edit_text"  class="form-control border-dark border input-text input-edit" 
-              id="input-email" placeholder='`+content+`'">`
+              id="input-email" placeholder='`+email+`'">`
     $("#form-content").html(html);
     $(".modal-title").text("Edit email");
 });
 
 $("#edit-image").on("click",function () {
-    edit_component = $(this).attr('id').replace("edit-","");
+    edit_component = $(this).attr('id').replace("edit-", "");
     let html = `  <div class="container" align="center">
                             <div class="status-message d-none text-center mt-2 p-2"></div>
-                            <form action="" id="edit-form-image" method="post">
+                            <form enctype="multipart/form-data" action="" id="edit-form-image" method="post">
                                 <div id="form-content" class="m-4">
                                     <input required name='image' type="file" class="input-edit input-text" id="input-image" accept="image/jpeg,image/png,image/gif">
                                 </div>
@@ -133,8 +97,7 @@ $("#edit-image").on("click",function () {
 });
 
 $("#edit-password").on("click",function () {
-    edit_component = $(this).attr('id').replace("edit-","");
-    let content=$("#user_"+edit_component).text();
+    edit_component = $(this).attr('id').replace("edit-", "");
     let html=`<input required type="password" name="password" class="mt-2 input-text border-dark border form-control" placeholder="Password"  id="input-password">
               <input required type="password" name="edit_text" class="mt-2 input-text border-dark border form-control" placeholder="New password"  id="input-new-password">
               <input required type="password" name="confirm_password" class="mt-2 input-text border-dark border form-control" placeholder="Confirm password" id="input-confirm-password">`
@@ -144,7 +107,7 @@ $("#edit-password").on("click",function () {
 
 $(document).on("submit","#edit-form-image",function () {
     let form_data = new FormData($(this)[0]);
-    form_data.append("jwt",getCookie("jwt"));
+    form_data.append("jwt", getCookie("jwt"));
     $.ajax({
         url: "../api/user/image.php",
         type: "POST",
@@ -155,13 +118,14 @@ $(document).on("submit","#edit-form-image",function () {
         data:form_data,
         success:function (result){
             console.log(result);
-            setCookie("jwt",result.jwt,"2");
-            $("#user-image").attr("src",result.image);
+            setCookie("jwt", result.jwt, "2");
+            checkImage(result.image,"#user-image");
+            image = result.image;
             $('#myModal').modal('hide');
         },
         error:function (result){
             console.log(result.responseJSON.message);
-            printMessage("error",result.responseJSON.message);
+            printMessage("error", result.responseJSON.message);
         }
     });
     return false;
@@ -169,10 +133,10 @@ $(document).on("submit","#edit-form-image",function () {
 
 $(document).on("submit","#edit-form",function () {
     let form = $(this);
-    let form_obj=form.serializeObject();
-    form_obj.jwt=getCookie("jwt");
-    form_obj.edit_name= edit_component;
-    let form_data=JSON.stringify(form_obj);
+    let form_obj = form.serializeObject();
+    form_obj.jwt = getCookie("jwt");
+    form_obj.edit_name = edit_component;
+    let form_data = JSON.stringify(form_obj);
     $.ajax({
         url: "../api/user/update.php",
         type : "POST",
@@ -182,6 +146,12 @@ $(document).on("submit","#edit-form",function () {
             console.log(result);
             setCookie("jwt",result.jwt,"2");
             $("#user_"+edit_component).text(form_obj.edit_text);
+            first_name = $("#user_first_name").text();
+            second_name = $("#user_second_name").text();
+            number = $("#user_number").text();
+            date = $("#user_date").text();
+            town = $("#user_town").text();
+            email = $("#user_email").text();
             $('#myModal').modal('hide');
         },
         error : function(result){

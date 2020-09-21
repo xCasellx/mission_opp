@@ -20,3 +20,8 @@ button:disabled{
     margin-top: 60px!important;
     border-top: #28a745 15px solid!important;
 }
+
+#user-image{
+    max-width: 480px;
+    max-height: 480px;
+}

@@ -20,15 +20,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="44678ede-d1ef-44cc-bcca-b44a972fba65" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/api/comment/update.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/script/user_data.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/comment/creat.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/comment/creat.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/comment/delete.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/comment/delete.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/comment/load.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/comment/load.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/config/config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/config/core.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/config/core.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/objects/comment.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/objects/comment.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/objects/user.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/objects/user.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/user-data/user-50/user-imag.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/api/user-data/user-50/user-imag.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/user-data/user-51/user-imag.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/api/user-data/user-51/user-imag.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/user/create.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/user/create.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/user/image.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/user/image.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/user/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/user/login.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/user/update.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/user/update.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/user/validate.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/user/validate.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/block/footer.php" beforeDir="false" afterPath="$PROJECT_DIR$/block/footer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/block/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/block/header.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/cabinet.php" beforeDir="false" afterPath="$PROJECT_DIR$/pages/cabinet.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/comment.php" beforeDir="false" afterPath="$PROJECT_DIR$/pages/comment.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/script/authorization.js" beforeDir="false" afterPath="$PROJECT_DIR$/script/authorization.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/script/cabinet.js" beforeDir="false" afterPath="$PROJECT_DIR$/script/cabinet.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/script/comments.js" beforeDir="false" afterPath="$PROJECT_DIR$/script/comments.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/script/control.js" beforeDir="false" afterPath="$PROJECT_DIR$/script/control.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/script/view.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/style/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/style/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +101,7 @@
       <workItem from="1599681908262" duration="762000" />
       <workItem from="1599721335135" duration="34314000" />
       <workItem from="1599846505088" duration="40322000" />
-      <workItem from="1600167087630" duration="49944000" />
+      <workItem from="1600167087630" duration="80411000" />
     </task>
     <servers />
   </component>
@@ -124,23 +142,31 @@
     </state>
     <state x="543" y="155" key="NewPhpClassDialog/0.0.1536.864/1920.25.1680.1050@0.0.1536.864" timestamp="1600274785243" />
     <state x="543" y="155" key="NewPhpClassDialog/0.0.1536.864@0.0.1536.864" timestamp="1599846564350" />
-    <state x="604" y="355" key="NewPhpFileDialog" timestamp="1600274795808">
+    <state x="604" y="355" key="NewPhpFileDialog" timestamp="1600425064262">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
     <state x="604" y="355" key="NewPhpFileDialog/0.0.1536.864/1920.25.1680.1050@0.0.1536.864" timestamp="1600274795808" />
-    <state x="604" y="355" key="NewPhpFileDialog/0.0.1536.864@0.0.1536.864" timestamp="1600249781104" />
+    <state x="604" y="355" key="NewPhpFileDialog/0.0.1536.864@0.0.1536.864" timestamp="1600425064262" />
+    <state x="618" y="345" key="VCS.ChangelistChooser" timestamp="1600411301608">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="618" y="345" key="VCS.ChangelistChooser/0.0.1536.864@0.0.1536.864" timestamp="1600411301608" />
+    <state x="361" y="165" key="Vcs.Push.Dialog.v2" timestamp="1600412110534">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="361" y="165" key="Vcs.Push.Dialog.v2/0.0.1536.864@0.0.1536.864" timestamp="1600412110534" />
     <state x="590" y="203" key="refactoring.ChangeSignatureDialog" timestamp="1600159304446">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
     <state x="590" y="203" key="refactoring.ChangeSignatureDialog/0.0.1536.864/1920.25.1680.1050@0.0.1536.864" timestamp="1600159304446" />
     <state x="590" y="203" key="refactoring.ChangeSignatureDialog/0.0.1536.864@0.0.1536.864" timestamp="1599571213452" />
-    <state x="425" y="197" key="run.anything.popup" timestamp="1600325266035">
+    <state x="425" y="197" key="run.anything.popup" timestamp="1600416242884">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state x="425" y="197" key="run.anything.popup/0.0.1536.864@0.0.1536.864" timestamp="1600325266035" />
-    <state x="431" y="181" width="672" height="678" key="search.everywhere.popup" timestamp="1600261529287">
+    <state x="425" y="197" key="run.anything.popup/0.0.1536.864@0.0.1536.864" timestamp="1600416242884" />
+    <state x="431" y="181" width="672" height="678" key="search.everywhere.popup" timestamp="1600429444972">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state x="431" y="181" width="672" height="678" key="search.everywhere.popup/0.0.1536.864@0.0.1536.864" timestamp="1600261529287" />
+    <state x="431" y="181" width="672" height="678" key="search.everywhere.popup/0.0.1536.864@0.0.1536.864" timestamp="1600429444972" />
   </component>
 </project>

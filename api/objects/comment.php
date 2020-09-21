@@ -7,33 +7,34 @@ class Comment {
     private $conn;
 
     public function __construct($db) {
-        $this->conn=$db;
+        $this->conn = $db;
     }
     function read() {
-        $comments= array();
-        $user=new User($this->conn);
-        $query="SELECT * FROM ".$this->name_table;
+        $comments = array();
+        $user = new User($this->conn);
+        $query ="SELECT * FROM " . $this->name_table;
         $stmt = $this->conn->prepare($query);
         if(!$stmt->execute()) {
-            $comments=array(
-                "status"=>"error",
-                "massage"=>"Unable to load comments"
+            $comments = array(
+                "status" => "error",
+                "massage" => "Unable to load comments"
             );
             return $comments;
         }
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
-            $res=$user->find($user_id);
+            $res = $user->find($user_id);
             array_push($comments,array(
                 "id" => $id,
                 "parent_id" => $parent_id,
                 "user_id" => $user_id,
                 "date" => $date,
                 "text" => $text,
+                "edit_check" => $edit_check,
                 "user" => array(
-                    "first_name"=>$res["first_name"],
-                    "second_name"=>$res["second_name"],
-                    "image"=>($res["image"] != null)? URL."/api/user-data/".$res["image"]."/user-imag.jpg": null
+                    "first_name" => $res["first_name"],
+                    "second_name" => $res["second_name"],
+                    "image" => ($res["image"] != null) ? URL . "/api/user-data/" . $res["image"] . "/user-imag.jpg" : null
                 )
             )) ;
         }
@@ -47,13 +48,13 @@ class Comment {
                 "message" => "empty text."
             );
         }
-        $query="INSERT INTO ".$this->name_table." 
+        $query = "INSERT INTO " . $this->name_table . " 
         SET
             user_id=:user_id,
             parent_id=:parent_id,
             text=:text,
             date=:date";
-        $text=htmlspecialchars(strip_tags($text));
+        $text = htmlspecialchars(strip_tags($text));
         $date = date("Y-m-d H:i:s");
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":date", $date);
@@ -66,20 +67,20 @@ class Comment {
                 "message" => "error creating comment"
             );
         }
-        $id =$this->conn->lastInsertId();
-        mail($user->email, "You comment", ('Date:'.$date." ".$text),
+        $id = $this->conn->lastInsertId();
+        mail($user->email, "You comment", ('Date:' . $date . " " . $text),
             'From: testalph55@gmail.com');
         if($parent_id != null) {
-            $query="SELECT user_id FROM ".$this->name_table." WHERE id =:parent_id";
+            $query = "SELECT user_id FROM " . $this->name_table . " WHERE id =:parent_id";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(":parent_id", $parent_id);
             $stmt->execute();
-            if($stmt->rowCount()>0) {
+            if($stmt->rowCount() > 0) {
                 $res=$stmt->fetch(PDO::FETCH_ASSOC);
                 $user_recipient = new User($this->conn);
-                $email_recipient=$user_recipient->find($res["user_id"]);
+                $email_recipient = $user_recipient->find( $res["user_id"] );
                 mail( $email_recipient["email"], "Your comment was answered by",
-                    ('Who-'. $email_recipient["first_name"]." ".'Date:'.$date."text: ".$text),
+                    ('Who-' . $email_recipient["first_name"] . " " . 'Date:' . $date . "text: " . $text),
                     'From: testalph55@gmail.com');
             }
         }
@@ -91,24 +92,41 @@ class Comment {
             "date" => $date,
             "text" => $text,
             "user" => array(
-                "first_name"=>$user->first_name,
-                "second_name"=>$user->second_name,
-                "image"=>$user->image
+                "first_name" => $user->first_name,
+                "second_name" => $user->second_name,
+                "image" => $user->image
             )
         );
     }
-    function delete ($comment_id) {
-        $query="SELECT * FROM ".$this->name_table." WHERE parent_id = ?";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $comment_id);
-        if (!$stmt->execute()) {
+    function delete ($comment_id,$user_id) {
+        if(empty($comment_id)){
             return array(
                 "status" => "error",
-                "message" => "1");
+                "message" => "not delete id empty");
         }
-        while($res=$stmt->fetch(PDO::FETCH_ASSOC)) {
+        if($user_id !== "parent") {
+            $query = "SELECT * FROM " . $this->name_table . " WHERE id = ? AND user_id = ?";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(1, $comment_id);
+            $stmt->bindParam(2, $user_id);
+            $stmt->execute();
+            if($stmt->rowCount() <= 0) {
+                return array(
+                    "status" => "error",
+                    "message" => "not deleted");
+            }
+        }
+        $query = "SELECT * FROM " . $this->name_table . " WHERE parent_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $comment_id);
+        if ( !$stmt->execute() ) {
+            return array(
+                "status" => "error",
+                "message" => "not delete");
+        }
+        while($res = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
-            $this->delete($res["id"]);
+            $this->delete($res["id"], "parent");
         }
 
         $sql = "DELETE FROM comments WHERE id =  :comment_id";
@@ -124,6 +142,25 @@ class Comment {
             "message" => $stmt->error);
     }
     function update($comment_id, $user_id, $text) {
+        if(empty($comment_id)&& empty($text)){
+            return array(
+                "status" => "error",
+                "message" => "empty text");
+        }
+        $query = "UPDATE " . $this->name_table . " SET text = :text , edit_check = 1 WHERE id = :id AND user_id = :user_id";
+        $stmt = $this->conn->prepare($query);
+        $text = htmlspecialchars(strip_tags($text));
+        $stmt->bindParam(":text", $text);
+        $stmt->bindParam(":id", $comment_id);
+        $stmt->bindParam(":user_id", $user_id);
+        if($stmt->execute()) {
+            return array(
+                "status" => "success",
+                "message" => "success update");
+        }
+        return array(
+            "status" => "error",
+            "message" => "error update");
 
     }
 }

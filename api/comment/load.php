@@ -5,10 +5,10 @@ include_once '../objects/user.php';
 include_once '../config/data-base.php';
 include_once '../objects/comment.php';
 include_once '../config/core.php';
-$database=new Database();
+$database = new Database();
 $db = $database->getConnection();
 $data = json_decode(file_get_contents("php://input"));
-$comm=new Comment($db);
+$comm = new Comment($db);
 $user = new User($db);
 $user_data = $user->validate($data->jwt, $key);
 if ($user_data["status"] === "error") {
@@ -17,7 +17,7 @@ if ($user_data["status"] === "error") {
     exit;
 }
 $res=$comm->read();
-if($res["status"]==="error"){
+if($res["status"] === "error"){
     http_response_code(400);
     echo json_encode($res);
     exit;
