@@ -1,5 +1,3 @@
-
-
 $("#sign-out").on("click", function() {
     setCookie("jwt","",-1);
     $(location).attr('href',"../");

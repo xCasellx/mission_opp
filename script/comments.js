@@ -1,4 +1,5 @@
 $(document).on("load_data", function () {
+    $("#comments-page").addClass("active font-weight-bold");
     let jwt = getCookie("jwt");
     $.ajax( {
         url: "../api/comment/load.php",

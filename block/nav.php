@@ -1,7 +1,17 @@
-<nav class="navbar border-bottom bg-success fixed-top mb-1 ">
-    <div class="clearfix w-100">
-        <a class= "float-left border-right border-white text-light  nav-link nav-item  ml-1 " href='../pages/cabinet.php'><strong>Сabinet</strong></a>
-        <a class= "float-left border-right border-white text-light  nav-link  nav-item ml-1 " href='../pages/comment.php'><strong>Comments</strong></a>
-        <a class= "float-right border-left border-white text-light  nav-link  nav-item ml-1 " id="sign-out" href='#'><strong>Sign out</strong></a>
+<nav class="navbar navbar-expand-sm fixed-top bg-dark navbar-dark">
+    <div class="container-fluid">
+        <ul class="nav navbar-nav">
+            <li class="nav-item" id="cabinet-page">
+                <a class= "nav-link" href='../pages/cabinet.php'>Сabinet</a>
+            </li>
+            <li class="nav-item" id="comments-page">
+                <a class= " nav-link" href='../pages/comment.php'>Comments</a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a class= "btn-outline-light btn" id="sign-out" href='#'>Sign out</a>
+            </li>
+        </ul>
     </div>
 </nav>

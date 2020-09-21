@@ -1,11 +1,12 @@
 $(document).on("load_data", function () {
+    $("#cabinet-page").addClass("active font-weight-bold");
     $("#user_first_name").text(first_name);
     $("#user_second_name").text(second_name);
     $("#user_number").text(number);
     $("#user_date").text(date);
     $("#user_town").text(town);
     $("#user_email").text(email);
-    $("#user-image").attr("src", image);
+    $("#user-image").attr("src", image+"?"+ Math.random());
 
 
 });
