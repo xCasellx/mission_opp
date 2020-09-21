@@ -71,20 +71,3 @@ function  deleteMessage() {
     }
 
 }
-
-
-
-
-function checkImage(image_path,component) {
-    if(image_path !== null){
-        $.ajax(image_path, {
-            method: "HEAD",
-            success: function() {
-                $(component).removeAttr("src").attr("src", image_path);
-            },
-            error: function (){
-                $(component).removeAttr("src").attr("src", "/api/image/nan.png");
-            }
-        });
-    }
-}

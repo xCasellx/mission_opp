@@ -6,7 +6,7 @@
             <div class="text-center container  card-header"><strong>User information</strong></div>
             <div class="row card-body ">
                 <div class="col" style="">
-                    <img class="rounded img-fluid w-100 img" id="user-image" src="/api/image/nan.png"  alt="">
+                    <img class="rounded img" id="user-image" src="/api/image/nan.png"  alt="">
                 </div>
                 <div class="col border-left border-dark">
                     <div class="col border-left border-dark">

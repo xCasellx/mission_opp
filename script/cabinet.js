@@ -5,7 +5,13 @@ $(document).on("load_data", function () {
     $("#user_date").text(date);
     $("#user_town").text(town);
     $("#user_email").text(email);
-    checkImage(image, "#user-image");
+    $("#user-image").attr("src", image);
+
+
+});
+
+$("#user-image").error(function() {
+    $(this).attr('src', '/api/image/nan.png?' + Math.random());
 });
 
 $(document).on("click","#open-edit-data",function () {
@@ -119,8 +125,8 @@ $(document).on("submit","#edit-form-image",function () {
         success:function (result){
             console.log(result);
             setCookie("jwt", result.jwt, "2");
-            checkImage(result.image,"#user-image");
             image = result.image;
+            $("#user-image").attr("src", image+"?"+Math.random());
             $('#myModal').modal('hide');
         },
         error:function (result){

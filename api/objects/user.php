@@ -58,7 +58,14 @@ class User {
                 "status" => "error",
                 "message" => "Empty text.");
              }
-
+        $pattern_password = '/(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*_]{6,}/';
+        if(!preg_match($pattern_password, $password)) {
+            return array(
+                "status" => "error",
+                "message" => "The password must be at least 6 or more.
+                              Password must consist of letters of the Latin alphabet (A-z),
+                              numbers (0-9) and special characters.");
+        }
         if($password != $confirm_password) {
             return array(
                 "status" => "error",

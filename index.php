@@ -1,6 +1,6 @@
 <?php require_once "block/header.php"?>
     <main role="main" class="d-flex align-items-center justify-content-center  container">
-        <div class="border-auto  border-success mb-5 bg-light  ">
+        <div class="border-auto border-success mb-5 bg-light " style="max-width: 70%">
             <div class="row mt-3 ">
                 <button disabled="true" class="text-white  btn  text-center col p-2 bg-success" id="sign-in" style="border-radius: 60px  0px 0px 60px">
                    <strong>Sign in</strong>
@@ -9,7 +9,7 @@
                     <strong>Register</strong>
                 </button>
             </div>
-            <div class="status-message d-none text-center  mt-2 p-2"></div>
+           <div class="text-center  mt-2 p-2 d-none status-message"></div>
             <div id="form" class="mt-0 pt-0">
             </div>
         </div>

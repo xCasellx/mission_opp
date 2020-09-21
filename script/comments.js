@@ -8,13 +8,19 @@ $(document).on("load_data", function () {
         success:function (result) {
             result.forEach(element => {
                 PrintComment(element);
+                $(".comment-img").error(function() {
+                    $(this).attr('src', '/api/image/nan.png?' + Math.random());
+                });
                 });
         },
         error : function(data) {
             console.log(data.responseJSON.message);
             }
-        })
+        });
 });
+
+
+
 
 function PrintComment(comment) {
     let edit = (comment.edit_check === "1") ? "(edited) " : "";
@@ -26,7 +32,7 @@ function PrintComment(comment) {
                 <div class = 'card p-0 ' id="comments-` +comment.id + `">
                     <div class =' p-1 card-header bg-dark text-light row' >
                         <div class ='col-1 p-0' style="max-width: 32px">
-                            <img class ='rounded m-0  img-fluid img' src='`+img+`' style='width: 32px;height: 32px;' alt=''>
+                            <img class ='comment-img rounded m-0 img-fluid img' src='`+img+`' style='width: 32px;height: 32px;' alt=''>
                         </div>
                         <h6 class='col '>`+ comment.user.first_name +` `+comment.user.second_name+`</h6>
                         <small class='col text-right date-comment'><lable>`+ edit +`</lable> `+ comment.date +`</small>
@@ -106,6 +112,9 @@ $(document).on("submit", ".form-comment", function () {
         data : form_data,
         success : function(result) {
             PrintComment(result);
+            $(".comment-img").error(function() {
+                $(this).attr('src', '/api/image/nan.png?' + Math.random());
+            });
             $(".off").attr('disabled', false);
             $('#myModal').modal('hide');
         },
