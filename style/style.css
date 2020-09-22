@@ -1,5 +1,8 @@
 body, main{
-    min-height: 90vh!important;
+    min-height: 100vh!important;
+}
+body {
+    background-color: #606060 !important;
 }
 main {
     min-width: 550px;

@@ -3,7 +3,7 @@
     <script src="../script/user_data.js"></script>
     <main class="bg-light container p-5">
         <div class="card ">
-            <div class="text-center container  card-header"><strong>User information</strong></div>
+            <div class="text-center container card-header"><h3>User information</h3></div>
             <div class="row card-body ">
                 <div class="col" style="">
                     <img class="rounded img" id="user-image" src="/api/image/nan.png"  alt="">

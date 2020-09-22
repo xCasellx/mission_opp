@@ -4,6 +4,8 @@ $("html").ready(function () {
        return false;
    }
     loginForm();
+    loadListRegion();
+    loadListCity();
 });
 
 $(document).on("submit", "#login-form", function () {
@@ -27,7 +29,9 @@ $(document).on("submit", "#login-form", function () {
 });
 
 $(document).on("submit", "#register-form", function () {
-    let form_data = JSON.stringify($(this).serializeObject());
+    let form_data = $(this).serializeObject();
+    form_data.town=$('#city option:selected').attr("id").replace("city-","");
+    form_data = JSON.stringify(form_data);
     $.ajax({
         url: "../api/user/create.php",
         type : "POST",
@@ -45,10 +49,12 @@ $(document).on("submit", "#register-form", function () {
 });
 
 
+
 $("#sign-in").on("click", loginForm);
 
 $("#register").on("click", function() {
     deleteMessage();
+    loadListCountry();
     $("#sign-in").attr('disabled', false);
     $("#register").attr('disabled', true);
     let d=maxDate(8);
@@ -60,9 +66,13 @@ $("#register").on("click", function() {
                     <input required type="email" class="border border-dark form-control w-100" name="email" placeholder="Email address">
                     <div class="row">
                         <input required type="tel" pattern="[0-9]{5,15}" class="border border-dark form-control" name="number" placeholder="Number">
-                        <input required type="text" class="border border-dark form-control" name="town" placeholder="Place of residence">
+                        <input required type="date" class="border border-dark form-control" max="`+d+`" name="date" >
                     </div>
-                    <input required type="date" class="w-100 border border-dark form-control" max="`+d+`" name="date" >
+                        <div class="row mt-2">
+                            <select required id="country" class="border border-dark col mr-1 custom-select"></select>
+                            <select required id="region" class="border border-dark col mr-1 custom-select"></select>
+                            <select required id="city" class="border border-dark col custom-select"></select>
+                        </div>
                     <div class="row">
                         <input required type="password" class="border border-dark form-control" name="password" placeholder="Password">
                         <input required type="password" class="border border-dark form-control" name="confirm_password" placeholder="Confirm password">
@@ -70,6 +80,15 @@ $("#register").on("click", function() {
                     <button type="submit" name="submit" class="float-right btn mt-4 mb-3 btn-success"><strong>Register</strong></button>
             </form>`
     $("#form").html(html);
+});
+
+$(document).on("change","#country", function () {
+    $("#city").empty();
+    loadListRegion();
+});
+
+$(document).on("change","#region", function () {
+    loadListCity();
 });
 
 function loginForm() {

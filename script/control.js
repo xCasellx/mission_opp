@@ -3,6 +3,59 @@ $("#sign-out").on("click", function() {
     $(location).attr('href',"../");
 });
 
+function  loadListCountry() {
+    $.ajax({
+        url: "../api/location/country.php",
+        type : "POST",
+        contentType : 'application/json',
+        success : function(result){
+            $("#country").html(`<option></option>`);
+
+            result.forEach(element => {
+                $("#country").append(`<option id='country-`+element.id+`'>`+element.name+`</option>`);
+            });
+        }
+    })
+}
+function  loadListRegion(){
+    let id =$('#country option:selected').attr("id");
+    id=id.replace("country-","");
+    $.ajax({
+        url: "../api/location/region.php",
+        type : "POST",
+        data: JSON.stringify({ country_id: id }),
+        contentType: 'application/json',
+        success: function(result){
+            $("#region").html("<option></option>");
+            result.forEach(element => {
+                $("#region").append(`<option id='region-`+element.id+`'>`+element.name+`</option>`);
+            });
+        },
+        error: function (result) {
+            console.log(result)
+        }
+    })
+
+}
+function  loadListCity(){
+    let id =$('#region option:selected').attr("id");
+    id=id.replace("region-","");
+    $.ajax({
+        url: "../api/location/city.php",
+        type : "POST",
+        data: JSON.stringify({ region_id: id }),
+        contentType: 'application/json',
+        success: function(result){
+            $("#city").html(`<option></option>`);
+            result.forEach(element => {
+                $("#city").append(`<option id='city-`+element.id+`'>`+element.name+`</option>`);
+            });
+        },
+        error: function (result) {
+            console.log(result)
+        }
+    })
+}
 
 function setCookie(cname, cvalue, days) {
     let d = new Date();

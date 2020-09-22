@@ -70,13 +70,22 @@ $("#edit-date").on("click",function () {
 });
 
 $("#edit-town").on("click",function () {
+    loadListCountry();
     edit_component = $(this).attr('id').replace("edit-","");
-    let html=`<input required type="text" name="edit_text" class="form-control border-dark border input-text input-edit" 
-              id="input-town" placeholder='`+town+`'">`
+    let html=`<select required id="country" class="border border-dark col mt-1 custom-select"></select>
+            <select required id="region" class="border border-dark col mt-1 custom-select"></select>
+            <select required id="city" class="border border-dark col mt-1 custom-select"></select>`
     $("#form-content").html(html);
     $(".modal-title").text("Edit town");
 });
+$(document).on("change","#country", function () {
+    $("#city").empty();
+    loadListRegion();
+});
 
+$(document).on("change","#region", function () {
+    loadListCity();
+});
 
 $("#edit-email").on("click",function () {
     edit_component = $(this).attr('id').replace("edit-","");
@@ -142,6 +151,9 @@ $(document).on("submit","#edit-form",function () {
     let form = $(this);
     let form_obj = form.serializeObject();
     form_obj.jwt = getCookie("jwt");
+    if(edit_component === "town") {
+        form_obj.edit_text = $('#city option:selected').attr("id").replace("city-","");
+    }
     form_obj.edit_name = edit_component;
     let form_data = JSON.stringify(form_obj);
     $.ajax({
@@ -152,7 +164,12 @@ $(document).on("submit","#edit-form",function () {
         success : function(result){
             console.log(result);
             setCookie("jwt",result.jwt,"2");
-            $("#user_"+edit_component).text(form_obj.edit_text);
+            if(edit_component === "town") {
+                $("#user_"+edit_component).text($("#city").val()+","+$("#region").val()+","+$("#country").val());
+            }
+            else {
+                $("#user_"+edit_component).text(form_obj.edit_text);
+            }
             first_name = $("#user_first_name").text();
             second_name = $("#user_second_name").text();
             number = $("#user_number").text();

@@ -142,7 +142,11 @@ class User {
                 "status" => "error",
                 "message" => "Empty text.");
         }
-        $query = "SELECT * FROM " . $this->name_table . " WHERE email = ?";
+        $query ='SELECT user.*, city.name AS city , region.name as region , country.name as country FROM user 
+            JOIN city ON city.id = user.town 
+            JOIN region ON region.id = city.region_id 
+            JOIN country ON country.id = region.country_id 
+            WHERE user.email = ?';
         $stmt = $this->conn->prepare($query);
         $email = htmlspecialchars(strip_tags($email));
         $stmt->bindParam(1, $email);
@@ -259,7 +263,11 @@ class User {
         $stmt->bindParam(":text", $text);
         $stmt->bindParam(":id", $id);
         if($stmt->execute()) {
-            $query = "SELECT * FROM ".$this->name_table." WHERE id = ?";
+            $query ='SELECT user.*, city.name AS city , region.name as region , country.name as country FROM user 
+            JOIN city ON city.id = user.town 
+            JOIN region ON region.id = city.region_id 
+            JOIN country ON country.id = region.country_id 
+            WHERE user.id = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(1, $id);
             $stmt->execute();
@@ -288,7 +296,7 @@ class User {
                 "email" => $row["email"],
                 "date" => $row["date"],
                 "number" => $row["number"],
-                "town" => $row["town"],
+                "town" => $row["city"].",".$row["region"].",".$row["country"],
                 "image" => ($row["image"] != null) ? URL . "/api/user-data/" . $row["image"] . "/user-imag.jpg" : null,
             )
         );
@@ -312,7 +320,7 @@ class User {
     }
 
     public function delete($id) {
-        $query = "DELETE FROM " . $this->table_name . " WHERE id = ?";
+        $query = "DELETE FROM " .$this->name_table. " WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $id);
         if ($stmt->execute()) {
