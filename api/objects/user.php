@@ -13,14 +13,17 @@ class User {
     private $conn;
     private $pattern_password = '/(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*_]{6,}/';
 
-    public function __construct($db) {
+
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
-    public  function updateImage($file, $id, $key, $iss, $aud, $iat, $nbf) {
+    public  function updateImage($file, $id, $key, $iss, $aud, $iat, $nbf)
+    {
         $fold_name = "user-".$id;
         $fold = "../user-data/user-" . $id;
-        if( !file_exists($fold) ) {
+        if ( !file_exists($fold) ) {
             mkdir($fold, 777, true);
         }
         $tmp_name = $file["tmp_name"];
@@ -31,7 +34,7 @@ class User {
         $stmt->bindParam(":image", $fold_name);
         $stmt->bindParam(":id", $id);
 
-        if($stmt->execute()) {
+        if ($stmt->execute()) {
             $query="SELECT * FROM " . $this->name_table . " WHERE id = ?";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(1, $id);
@@ -52,8 +55,9 @@ class User {
 
     public function creat(
         $first_name, $second_name, $email, $number,
-        $date, $town, $password, $confirm_password) {
-        if( empty($town)&&
+        $date, $town, $password, $confirm_password)
+    {
+        if ( empty($town)&&
             empty($number)&&
             empty($date)&&
             empty($first_name)&&
@@ -66,7 +70,7 @@ class User {
                 "message" => "Empty text."
             );
              }
-        if(!preg_match($this->pattern_password, $password)) {
+        if (!preg_match($this->pattern_password, $password)) {
             return array(
                 "status" => "error",
                 "message" => "The password must be at least 6 or more.
@@ -74,7 +78,7 @@ class User {
                               numbers (0-9) and special characters."
             );
         }
-        if($password != $confirm_password) {
+        if ($password != $confirm_password) {
             return array(
                 "status" => "error",
                 "message" => "Password mismatch."
@@ -87,7 +91,7 @@ class User {
         $stmt->bindParam(1, $email);
         $stmt->execute();
 
-        if($stmt->rowCount() > 0) {
+        if ($stmt->rowCount() > 0) {
             return array(
                 "status" => "error",
                 "message" => "this email already exists."
@@ -122,7 +126,7 @@ class User {
         $password = password_hash($password, PASSWORD_BCRYPT);
         $stmt->bindParam(":password", $password);
 
-        if($stmt->execute()) {
+        if ($stmt->execute()) {
 
             return array(
                 "status" => "success",
@@ -135,9 +139,10 @@ class User {
             "message" => "Create error."
         );
     }
-    public function signIn($password, $email, $key, $iss, $aud, $iat, $nbf) {
+    public function signIn($password, $email, $key, $iss, $aud, $iat, $nbf)
+    {
 
-        if(empty($password) && empty($email)) {
+        if (empty($password) && empty($email)) {
             return array(
                 "status" => "error",
                 "message" => "Empty text.");
@@ -152,7 +157,7 @@ class User {
         $stmt->bindParam(1, $email);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if(($stmt->rowCount() == 0) || !password_verify($password,$row["password"]) ) {
+        if (($stmt->rowCount() == 0) || !password_verify($password,$row["password"]) ) {
             return array(
                 "status" => "error",
                 "message" => "Incorrect email or passwords.");
@@ -172,8 +177,7 @@ class User {
                 "message" => "Access is allowed.",
                 "jwt" => $decoded->data
             );
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             return array(
                 "status" => "error",
                 "message" => $e->getMessage()
@@ -183,8 +187,9 @@ class User {
 
     public function update(
         $edit_name ,$edit_text ,$password, $confirm_password,
-        $id, $key, $iss, $aud, $iat, $nbf) {
-        if(empty($edit_text) && empty($edit_name)) {
+        $id, $key, $iss, $aud, $iat, $nbf)
+    {
+        if (empty($edit_text) && empty($edit_name)) {
             return array(
                 "status" => "error",
                 "message" => "Empty text."
@@ -197,7 +202,7 @@ class User {
                 $edit_text = htmlspecialchars(strip_tags($edit_text));
                 $stmt->bindParam(1, $edit_text);
                 $stmt->execute();
-                if($stmt->rowCount() > 0) {
+                if ($stmt->rowCount() > 0) {
                     return array(
                         "status" => "error",
                         "message" => "This email already exists."
@@ -207,7 +212,7 @@ class User {
             case "date":
                 $temp_date = strtotime($edit_text);
                 $temp_upd = strtotime((date('Y')-5).date('-m-d'));
-                if($temp_date > $temp_upd) {
+                if ($temp_date > $temp_upd) {
                     return array(
                         "status" => "error",
                         "message" => "Wrong date."
@@ -216,13 +221,13 @@ class User {
                 break;
             case "password":
 
-                if(empty($password) && empty($confirm_password)){
+                if (empty($password) && empty($confirm_password)){
                     return array(
                         "status" => "error",
                         "message" => "Empty password"
                     );
                 }
-                if(!preg_match($this->pattern_password, $edit_text)) {
+                if (!preg_match($this->pattern_password, $edit_text)) {
                     return array(
                         "status" => "error",
                         "message" => "The password must be at least 6 or more.
@@ -236,14 +241,14 @@ class User {
                 $stmt->bindParam(1, $id);
                 $stmt->execute();
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                if(!password_verify($password, $row["password"])) {
+                if (!password_verify($password, $row["password"])) {
                     return array(
                         "status" => "error",
                         "message" => "Incorrect passwords."
                     );
                 }
-                if($edit_text !== $confirm_password){
-                    if(!password_verify($password, $row["password"])) {
+                if ($edit_text !== $confirm_password) {
+                    if (!password_verify($password, $row["password"])) {
                         return array(
                             "status" => "error",
                             "message" => "Password mismatch."
@@ -262,7 +267,7 @@ class User {
         $text = htmlspecialchars(strip_tags($edit_text));
         $stmt->bindParam(":text", $text);
         $stmt->bindParam(":id", $id);
-        if($stmt->execute()) {
+        if ($stmt->execute()) {
             $query ='SELECT user.*, city.name AS city , region.name as region , country.name as country FROM user 
             JOIN city ON city.id = user.town 
             JOIN region ON region.id = city.region_id 
@@ -283,7 +288,8 @@ class User {
             "message" => "Error update." . $stmt->errorInfo());
     }
 
-    public  function createJWT($key, $iss, $aud, $iat, $nbf, $row){
+    public  function createJWT($key, $iss, $aud, $iat, $nbf, $row)
+    {
         $token = array(
             "iss" => $iss,
             "aud" => $aud,
@@ -303,23 +309,25 @@ class User {
         return JWT::encode($token, $key);
     }
 
-    public function find($id) {
-        if(empty($id)) {
+    public function find($id)
+    {
+        if (empty($id)) {
             return null;
         }
         $query = "SELECT * FROM " . $this->name_table . " WHERE id = ?";
         $stmt =  $this->conn->prepare($query);
         $stmt->bindParam(1, $id);
-        if(!$stmt->execute()) {
+        if (!$stmt->execute()) {
             return null;
         }
-        if($stmt->rowCount() == 0) {
+        if ($stmt->rowCount() == 0) {
             return null;
         }
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $query = "DELETE FROM " .$this->name_table. " WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $id);

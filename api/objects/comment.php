@@ -2,7 +2,8 @@
 include_once '../config/config.php';
 include_once '../objects/user.php';
 
-class Comment {
+class Comment
+{
     private $name_table = "comments";
     private $conn;
 
@@ -10,12 +11,13 @@ class Comment {
         $this->conn = $db;
     }
 
-    function read() {
+    function read()
+    {
         $comments = array();
         $user = new User($this->conn);
         $query ="SELECT * FROM " . $this->name_table;
         $stmt = $this->conn->prepare($query);
-        if(!$stmt->execute()) {
+        if (!$stmt->execute()) {
             $comments = array(
                 "status" => "error",
                 "massage" => "Unable to load comments"
@@ -43,8 +45,9 @@ class Comment {
 
     }
 
-    function create($user, $text ,$parent_id) {
-        if(empty($text)) {
+    function create($user, $text ,$parent_id)
+    {
+        if (empty($text)) {
             return array(
                 "status" => "error",
                 "message" => "empty text."
@@ -63,7 +66,7 @@ class Comment {
         $stmt->bindParam(":text", $text);
         $stmt->bindParam(":parent_id", $parent_id);
         $stmt->bindParam(":user_id", $user->id);
-        if(!$stmt->execute()) {
+        if (!$stmt->execute()) {
             return array(
                 "status" => "error",
                 "message" => "error creating comment"
@@ -72,12 +75,12 @@ class Comment {
         $id = $this->conn->lastInsertId();
         mail($user->email, "You comment", ('Date:' . $date . " " . $text),
             'From: testalph55@gmail.com');
-        if($parent_id != null) {
+        if ($parent_id != null) {
             $query = "SELECT user_id FROM " . $this->name_table . " WHERE id =:parent_id";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(":parent_id", $parent_id);
             $stmt->execute();
-            if($stmt->rowCount() > 0) {
+            if ($stmt->rowCount() > 0) {
                 $res=$stmt->fetch(PDO::FETCH_ASSOC);
                 $user_recipient = new User($this->conn);
                 $email_recipient = $user_recipient->find( $res["user_id"] );
@@ -102,39 +105,23 @@ class Comment {
     }
 
     function delete ($comment_id,$user_id) {
-        if(empty($comment_id)){
+        if (empty($comment_id)) {
             return array(
                 "status" => "error",
                 "message" => "not delete id empty"
             );
         }
-        if($user_id !== "parent") {
             $query = "SELECT * FROM " . $this->name_table . " WHERE id = ? AND user_id = ?";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(1, $comment_id);
             $stmt->bindParam(2, $user_id);
             $stmt->execute();
-            if($stmt->rowCount() <= 0) {
+            if ($stmt->rowCount() <= 0) {
                 return array(
                     "status" => "error",
                     "message" => "not deleted"
                 );
             }
-        }
-        $query = "SELECT * FROM " . $this->name_table . " WHERE parent_id = ?";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $comment_id);
-        if ( !$stmt->execute() ) {
-            return array(
-                "status" => "error",
-                "message" => "not delete"
-            );
-        }
-        while($res = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
-            $this->delete($res["id"], "parent");
-        }
-
         $sql = "DELETE FROM comments WHERE id =  :comment_id";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(":comment_id", $comment_id);
@@ -150,8 +137,9 @@ class Comment {
         );
     }
 
-    function update($comment_id, $user_id, $text) {
-        if(empty($comment_id)&& empty($text)){
+    function update($comment_id, $user_id, $text)
+    {
+        if(empty($comment_id)&& empty($text)) {
             return array(
                 "status" => "error",
                 "message" => "empty text"
@@ -163,7 +151,7 @@ class Comment {
         $stmt->bindParam(":text", $text);
         $stmt->bindParam(":id", $comment_id);
         $stmt->bindParam(":user_id", $user_id);
-        if($stmt->execute()) {
+        if ($stmt->execute()) {
             return array(
                 "status" => "success",
                 "message" => "success update"
