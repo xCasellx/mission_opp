@@ -47,7 +47,7 @@ function PrintComment(comment) {
                     </div>
                     <div class="ml-3 border-left border-dark" id="comments`+comment.id+`"></div>
                 </div>`
-    if(comment.parent_id === null) {
+    if (comment.parent_id === null) {
 
         $('#comments').append(html);
     }
@@ -164,7 +164,7 @@ $('#myModal').on('hide.bs.modal', function() {
 $(document).on("click", "#delete-button", function () {
     $(".off").attr('disabled', true);
     let jwt=getCookie("jwt");
-    if(jwt !== undefined) {
+    if (jwt !== undefined) {
         $.ajax({
             url: "../api/comment/delete.php",
             type: "POST",

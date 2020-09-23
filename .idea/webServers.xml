@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="3acf9072-07e5-4822-a89f-de8c1530b065" name="oop_host">
+        <fileTransfer rootFolder="/var/www/html/mission_opp" accessType="SFTP" host="3.129.9.25" port="22" sshConfigId="4932f07a-3d71-4f03-982c-933c71691018" sshConfig="ubuntu@3.129.9.25:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

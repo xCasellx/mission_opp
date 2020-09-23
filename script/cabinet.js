@@ -18,7 +18,7 @@ $("#user-image").error(function() {
 $(document).on("click","#open-edit-data",function () {
     $(".edit-data").toggleClass("d-none");
     $("#edit-image").toggleClass("d-none");
-    if($("#open-edit-data").text()=="Edit") {
+    if ($("#open-edit-data").text()=="Edit") {
         $("#open-edit-data").text("Cancel");
     }
     else {
@@ -151,7 +151,7 @@ $(document).on("submit","#edit-form",function () {
     let form = $(this);
     let form_obj = form.serializeObject();
     form_obj.jwt = getCookie("jwt");
-    if(edit_component === "town") {
+    if (edit_component === "town") {
         form_obj.edit_text = $('#city option:selected').attr("id").replace("city-","");
     }
     form_obj.edit_name = edit_component;
@@ -164,7 +164,7 @@ $(document).on("submit","#edit-form",function () {
         success : function(result){
             console.log(result);
             setCookie("jwt",result.jwt,"2");
-            if(edit_component === "town") {
+            if (edit_component === "town") {
                 $("#user_"+edit_component).text($("#city").val()+","+$("#region").val()+","+$("#country").val());
             }
             else {

@@ -85,13 +85,8 @@ class User {
             );
         }
 
-        $query = "SELECT email FROM " . $this->name_table . " WHERE email = ? ";
-        $stmt = $this->conn->prepare($query);
-        $email = htmlspecialchars(strip_tags($email));
-        $stmt->bindParam(1, $email);
-        $stmt->execute();
 
-        if ($stmt->rowCount() > 0) {
+        if (!$this->checkEmail($email)) {
             return array(
                 "status" => "error",
                 "message" => "this email already exists."
@@ -139,6 +134,7 @@ class User {
             "message" => "Create error."
         );
     }
+
     public function signIn($password, $email, $key, $iss, $aud, $iat, $nbf)
     {
 
@@ -197,12 +193,8 @@ class User {
         }
         switch ($edit_name) {
             case "email":
-                $query = "SELECT * FROM " . $this->name_table . " WHERE email = ?";
-                $stmt = $this->conn->prepare($query);
-                $edit_text = htmlspecialchars(strip_tags($edit_text));
-                $stmt->bindParam(1, $edit_text);
-                $stmt->execute();
-                if ($stmt->rowCount() > 0) {
+
+                if (!$this->checkEmail("$edit_text")) {
                     return array(
                         "status" => "error",
                         "message" => "This email already exists."
@@ -324,6 +316,24 @@ class User {
             return null;
         }
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function  checkEmail($email)
+    {
+        $query = "SELECT * FROM " . $this->name_table . " WHERE email = ?";
+        $stmt = $this->conn->prepare($query);
+        $edit_text = htmlspecialchars(strip_tags($email));
+        $stmt->bindParam(1, $edit_text);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            return false;
+        }
+        return true;
+    }
+
+    public function recoveryPassword($new_password, $confirm_password)
+    {
+
     }
 
     public function delete($id)

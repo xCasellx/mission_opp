@@ -10,13 +10,5 @@ $query = "SELECT * FROM country";
 $stmt = $db->prepare($query);;
 
 $stmt->execute();
-$list_country=array();
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    extract($row);
-    array_push($list_country ,array(
-        "id" => $id,
-        "name" => $name
-    ));
-}
-echo json_encode($list_country);
-
+$list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+echo json_encode($list);

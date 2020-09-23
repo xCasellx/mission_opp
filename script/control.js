@@ -8,7 +8,7 @@ function  loadListCountry() {
         url: "../api/location/country.php",
         type : "POST",
         contentType : 'application/json',
-        success : function(result){
+        success : function(result) {
             $("#country").html(`<option></option>`);
 
             result.forEach(element => {
@@ -17,7 +17,7 @@ function  loadListCountry() {
         }
     })
 }
-function  loadListRegion(){
+function  loadListRegion() {
     let id =$('#country option:selected').attr("id");
     id=id.replace("country-","");
     $.ajax({
@@ -25,7 +25,7 @@ function  loadListRegion(){
         type : "POST",
         data: JSON.stringify({ country_id: id }),
         contentType: 'application/json',
-        success: function(result){
+        success: function(result) {
             $("#region").html("<option></option>");
             result.forEach(element => {
                 $("#region").append(`<option id='region-`+element.id+`'>`+element.name+`</option>`);
@@ -37,7 +37,7 @@ function  loadListRegion(){
     })
 
 }
-function  loadListCity(){
+function  loadListCity() {
     let id =$('#region option:selected').attr("id");
     id=id.replace("region-","");
     $.ajax({
@@ -68,7 +68,7 @@ function getCookie(cname) {
     let name = cname + "=";
     let  co = decodeURIComponent(document.cookie).split("; ");
     for (let i = 0 ; i < co.length ; ++i) {
-        if(co[i].indexOf(name) === 0) {
+        if (co[i].indexOf(name) === 0) {
             return co[i].substring(name.length, co[i].length);
         }
     }
@@ -99,10 +99,10 @@ function maxDate (year) {
 
 function  printMessage(type, text) {
     $(".status-message").removeClass( "d-none" );
-    if("success" === type) {
+    if ("success" === type) {
         $(".status-message").addClass("alert-success");
     }
-    else if("error" === type) {
+    else if ("error" === type) {
         $(".status-message").addClass("alert-danger");
     }
     $(".status-message").text(text);
@@ -112,11 +112,11 @@ function  printMessage(type, text) {
 function  deleteMessage() {
     $(".status-message").addClass( "d-none" );
     $(".status-message").text("");
-    if($(".status-message").hasClass( "alert-danger" )) {
+    if ($(".status-message").hasClass( "alert-danger" )) {
         $(".status-message").removeClass( "alert-danger" );
         return ;
     }
-    if($(".status-message").hasClass( "alert-success" )) {
+    if ($(".status-message").hasClass( "alert-success" )) {
         $(".status-message").removeClass( "alert-success" );
         return ;
     }

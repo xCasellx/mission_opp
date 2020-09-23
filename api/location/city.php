@@ -10,12 +10,5 @@ $query = "SELECT * FROM city WHERE region_id = ?";
 $stmt = $db->prepare($query);;
 $stmt->bindParam(1, $data->region_id);
 $stmt->execute();
-$list = array();
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    extract($row);
-    array_push($list, array(
-        "id" => $id,
-        "name" => $name
-    ));
-}
+$list = $stmt->fetchAll(PDO::FETCH_ASSOC);
 echo json_encode($list);

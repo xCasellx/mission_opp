@@ -10,13 +10,13 @@ let first_name,
 
 $("html").ready(function () {
     let jwt=getCookie("jwt");
-    if(jwt !== undefined) {
+    if (jwt !== undefined) {
         $.ajax({
             url: "../api/user/validate.php",
             type : "POST",
             contentType : 'application/json',
             data : JSON.stringify({ jwt: jwt }),
-            success : function(result){
+            success : function(result) {
                 first_name = result.jwt.first_name;
                 second_name = result.jwt.second_name;
                 number = result.jwt.number;
@@ -27,7 +27,7 @@ $("html").ready(function () {
                 user_id = result.jwt.id;
                 $(document).trigger('load_data');
             },
-            error : function(result){
+            error : function(result) {
                 console.log(result.responseJSON.message);
             }
         })

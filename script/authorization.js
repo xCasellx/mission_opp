@@ -1,5 +1,5 @@
 $("html").ready(function () {
-   if(getCookie("jwt") !== undefined){
+   if (getCookie("jwt") !== undefined) {
        $(location).attr('href',"../pages/cabinet.php");
        return false;
    }
@@ -16,11 +16,11 @@ $(document).on("submit", "#login-form", function () {
         contentType : 'application/json',
         data : form_data,
 
-        success : function(result){
+        success : function(result) {
             setCookie("jwt", result.jwt,2);
             $(location).attr('href',"../pages/cabinet.php");
         },
-        error : function(result){
+        error : function(result) {
             console.log(result.responseJSON);
             printMessage("error",result.responseJSON.message);
         }
