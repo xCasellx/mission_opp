@@ -1,5 +1,5 @@
 body, main{
-    min-height: 100vh!important;
+    
 }
 body {
     background-color: #606060 !important;
@@ -7,7 +7,9 @@ body {
 main {
     min-width: 550px;
 }
-
+input{
+    width: 100%!important;
+}
 
 .form-check input{
     width: 30vh;

@@ -4,6 +4,7 @@ include_once '../libs/php-jwt-master/src/BeforeValidException.php';
 include_once '../libs/php-jwt-master/src/ExpiredException.php';
 include_once '../libs/php-jwt-master/src/SignatureInvalidException.php';
 include_once '../libs/php-jwt-master/src/JWT.php';
+include_once "../config/config-mail.php";
 
 use \Firebase\JWT\JWT;
 
@@ -22,20 +23,27 @@ class User {
     public  function updateImage($file, $id, $key, $iss, $aud, $iat, $nbf)
     {
         $fold_name = "user-".$id;
-        $fold = "../user-data/user-" . $id;
+        $fold = $_SERVER['DOCUMENT_ROOT']."/api/user-data/".$fold_name;
         if ( !file_exists($fold) ) {
-            mkdir($fold, 777, true);
+            $oldumask = umask(0);
+            mkdir($fold, 0777, true);
+            umask($oldumask);
         }
         $tmp_name = $file["tmp_name"];
         $full_path_image = $fold . "/user-imag.jpg";
         move_uploaded_file($tmp_name, $full_path_image);
+
         $query = "UPDATE " . $this->name_table . " SET image = :image WHERE id = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":image", $fold_name);
         $stmt->bindParam(":id", $id);
 
         if ($stmt->execute()) {
-            $query="SELECT * FROM " . $this->name_table . " WHERE id = ?";
+            $query ='SELECT user.*, city.name AS city , region.name as region , country.name as country FROM user 
+            JOIN city ON city.id = user.town 
+            JOIN region ON region.id = city.region_id 
+            JOIN country ON country.id = region.country_id 
+            WHERE user.id = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(1, $id);
             $stmt->execute();
@@ -213,7 +221,7 @@ class User {
                 break;
             case "password":
 
-                if (empty($password) && empty($confirm_password)){
+                if (empty($password) && empty($confirm_password)) {
                     return array(
                         "status" => "error",
                         "message" => "Empty password"
@@ -331,9 +339,80 @@ class User {
         return true;
     }
 
-    public function recoveryPassword($new_password, $confirm_password)
+    public function recoveryPassword($new_password, $confirm_password, $hash)
     {
+        if (empty($new_password) && empty($confirm_password)) {
+            return array(
+                "status" => "error",
+                "message" => "Empty password"
+            );
+        }
 
+        if (!preg_match($this->pattern_password, $new_password)) {
+            return array(
+                "status" => "error",
+                "message" => "The password must be at least 6 or more.
+                              Password must consist of letters of the Latin alphabet (A-z),
+                              numbers (0-9) and special characters."
+            );
+        }
+        if ($new_password !== $confirm_password) {
+                return array(
+                    "status" => "error",
+                    "message" => "Password mismatch."
+                );
+        }
+        $new_password = password_hash($new_password, PASSWORD_BCRYPT);
+        $query = "UPDATE " . $this->name_table . " SET password = :new_password hash = NULL WHERE hash = :hash";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":text", $new_password);
+        $stmt->bindParam(":hash", $hash);
+        $stmt->execute();
+        return array(
+            "status" => "success",
+            "message" => "Password edit."
+        );
+    }
+
+    public  function checkHash($hash)
+    {
+        $query = "SELECT * FROM " . $this->name_table . " WHERE hash = ?";
+        $stmt = $this->conn->prepare($query);
+        $edit_text = htmlspecialchars(strip_tags($hash));
+        $stmt->bindParam(1, $edit_text);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public function emailHash($email)
+    {
+        if($this->checkEmail($email)) {
+            return array(
+                "status" => "error",
+                "message" => "email doesn't exist ->".$email);
+        }
+        $hash = password_hash(microtime() .$email . time(),PASSWORD_BCRYPT);
+        $link = $link = 'http://'.$_SERVER['HTTP_HOST']."/pages/recovery.php?hash=".$hash;
+        $sendmail = new sendMail();
+        $mail = $sendmail->getMail();
+        $mail->addAddress($email, $email);
+        $mail->Subject = 'Recovery Password';
+        $mail->msgHTML("
+                        <b>link:</b>$link;
+                    ");
+        $mail->send();
+        $query = "UPDATE " . $this->name_table . " SET hash = :hash WHERE email = :email";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":hash", $hash);
+        $stmt->bindParam(":email", $email);
+        $stmt->execute();
+        return array(
+            "status" => "success",
+            "message" => "Sending password recovery data send on email"
+        );
     }
 
     public function delete($id)

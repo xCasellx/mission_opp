@@ -1,6 +1,7 @@
 <?php
 include_once '../config/config.php';
 include_once '../objects/user.php';
+include_once "../config/config-mail.php";
 
 class Comment
 {
@@ -73,8 +74,17 @@ class Comment
             );
         }
         $id = $this->conn->lastInsertId();
-        mail($user->email, "You comment", ('Date:' . $date . " " . $text),
-            'From: testalph55@gmail.com');
+        $sendmail = new sendMail();
+        $mail = $sendmail->getMail();
+        $mail->addAddress($user->email, $user->first_name.' '.$user->second_name);
+
+        $mail->Subject = 'Your comment';
+        $mail->msgHTML("
+                        <b>Date:</b> $date<br><br>
+                        <b>Text:</b><br>$text
+                    ");
+        $mail->send();
+
         if ($parent_id != null) {
             $query = "SELECT user_id FROM " . $this->name_table . " WHERE id =:parent_id";
             $stmt = $this->conn->prepare($query);
@@ -84,9 +94,17 @@ class Comment
                 $res=$stmt->fetch(PDO::FETCH_ASSOC);
                 $user_recipient = new User($this->conn);
                 $email_recipient = $user_recipient->find( $res["user_id"] );
-                mail( $email_recipient["email"], "Your comment was answered by",
-                    ('Who-' . $email_recipient["first_name"] . " " . 'Date:' . $date . "text: " . $text),
-                    'From: testalph55@gmail.com');
+                $sendmail = new sendMail();
+                $mail = $sendmail->getMail();
+                $mail->addAddress($email_recipient["email"], $email_recipient["first_name"]." ".$email_recipient["second_name"]);
+                $mail->Subject = 'Your comment was answered';
+                $mail->msgHTML("
+                        <b>Name:</b>$user->first_name $user->second_name<br>
+                        <b>Email:</b> $user->email<br><br>
+                        <b>Date:</b> $date<br><br>
+                        <b>Text:</b><br>$text
+                    ");
+                $mail->send();
             }
         }
         return array(

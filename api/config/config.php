@@ -1,2 +1,2 @@
 <?php
-define("URL", "http://oop/");
+define("URL", "http://3.22.79.53/");
