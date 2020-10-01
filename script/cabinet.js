@@ -7,9 +7,32 @@ $(document).on("load_data", function () {
     $("#user_town").text(town);
     $("#user_email").text(email);
     $("#user-image").attr("src", image+"?"+ Math.random());
-
-
+    if(email_confirm === "0") {
+        let html = `
+          <div class="alert-danger p-2" id="main-message">
+            <a href="#" class="text-decoration-none text-danger" id="email-confirm">Click to confirm mail</a>  
+          </div>
+        `;
+    $("main").prepend(html);
+    }
 });
+
+$(document).on("click", "#email-confirm", function () {
+    $( document ).off( "click", "#email-confirm" );
+    $.ajax({
+        url: "../api/user/hash-confirm-email.php",
+        type : "POST",
+        contentType : 'application/json',
+        data : JSON.stringify({ email: email}),
+        success : function(result) {
+            $("#main-message").html("A message has been sent to the mail");
+        },
+        error : function(result) {
+            $("#main-message").html("A message has been sent to the mail,failed to send message");
+        }
+    })
+});
+
 
 $("#user-image").error(function() {
     $(this).attr('src', '/api/image/nan.png?' + Math.random());
@@ -29,13 +52,13 @@ let edit_component;
 
 $(".edit-data").on("click",function (){
     let html = `  <div class="container" align="center">
-                            <div class="status-message d-none text-center mt-2 p-2"></div>
-                            <form action="" id="edit-form" method="post">
-                                <div id="form-content" class="m-4"></div>
-                                <button type="submit"  id="save_button" class="btn btn-outline-success" ><strong>Save</strong></button>
-                                <button type="button"  class="btn btn-outline-danger" data-dismiss="modal"><strong>Close</strong></button>
-                            </form>
-                        </div>`
+                        <div class="status-message d-none text-center mt-2 p-2"></div>
+                        <form action="" id="edit-form" method="post">
+                            <div id="form-content" class="m-4"></div>
+                            <button type="submit"  id="save_button" class="btn btn-outline-success" ><strong>Save</strong></button>
+                            <button type="button"  class="btn btn-outline-danger" data-dismiss="modal"><strong>Close</strong></button>
+                        </form>
+                   </div>`
     $(".modal-body").html(html);
 })
 
@@ -89,7 +112,8 @@ $(document).on("change","#region", function () {
 
 $("#edit-email").on("click",function () {
     edit_component = $(this).attr('id').replace("edit-","");
-    let html=`<input required type="email" name="edit_text"  class="form-control border-dark border input-text input-edit" 
+    let html=`<input required type="password" name="password" class="mt-2 input-text border-dark border form-control" placeholder="Password"  id="input-password">
+              <input required type="email" name="edit_text"  class="mt-2 form-control border-dark border input-text input-edit" 
               id="input-email" placeholder='`+email+`'">`
     $("#form-content").html(html);
     $(".modal-title").text("Edit email");
@@ -109,7 +133,6 @@ $("#edit-image").on("click",function () {
                         </div>`
     $(".modal-body").html(html);
     $(".modal-title").text("Edit image");
-
 });
 
 $("#edit-password").on("click",function () {
@@ -167,15 +190,24 @@ $(document).on("submit","#edit-form",function () {
             if (edit_component === "town") {
                 $("#user_"+edit_component).text($("#city").val()+","+$("#region").val()+","+$("#country").val());
             }
-            else {
-                $("#user_"+edit_component).text(form_obj.edit_text);
+            else if(edit_component === "email") {
+                let html = `
+                  <div class="alert-success p-2" id="message">
+                       A message has been sent to the mail 
+                  </div>
+                `;
+                $("main").prepend(html);
             }
-            first_name = $("#user_first_name").text();
-            second_name = $("#user_second_name").text();
-            number = $("#user_number").text();
-            date = $("#user_date").text();
-            town = $("#user_town").text();
-            email = $("#user_email").text();
+            else  {
+                $("#user_"+edit_component).text(form_obj.edit_text);
+                first_name = $("#user_first_name").text();
+                second_name = $("#user_second_name").text();
+                number = $("#user_number").text();
+                date = $("#user_date").text();
+                town = $("#user_town").text();
+                email = $("#user_email").text();
+            }
+
             $('#myModal').modal('hide');
         },
         error : function(result){
@@ -185,7 +217,6 @@ $(document).on("submit","#edit-form",function () {
     })
     return false;
 });
-
 
 $('#myModal').on('hide.bs.modal', function() {
     deleteMessage();

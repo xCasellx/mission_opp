@@ -10,7 +10,7 @@ $db = $database->getConnection();
 $user = new User($db);
 http_response_code(401);
 
-$res = $user->emailHash($data->email);
+$res = $user->emailHash($data->email,"pages/recovery.php",'Recovery Password');
 
 if($res["status"] === "error") {
     http_response_code(401);

@@ -10,7 +10,7 @@ $db = $database->getConnection();
 $data = json_decode(file_get_contents("php://input"));
 
 $user = new User($db);
-$user_data = $user->validate($data->jwt, $key);
+$user_data = $user->validate($data->jwt, $config_jwt["key"]);
 if ($user_data["status"] === "error") {
     http_response_code(400);
     echo json_encode($user_data);

@@ -12,9 +12,7 @@ $user = new User($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
-$res = $user->validate($data->jwt, $key);
-
-
+$res = $user->validate($data->jwt, $config_jwt["key"]);
 
 if($res["status"] === "error") {
     http_response_code(401);

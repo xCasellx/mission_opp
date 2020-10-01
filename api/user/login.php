@@ -11,7 +11,7 @@ $user = new User($db);
 $data = json_decode(file_get_contents("php://input"));
 
 
-$res = $user->signIn($data->password, $data->email, $key, $iss, $aud, $iat, $nbf);
+$res = $user->signIn($data->password, $data->email, $config_jwt);
 
 if($res["status"] === "error") {
     http_response_code(401);

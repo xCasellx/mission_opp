@@ -4,7 +4,7 @@ $("html").ready(function () {
         $(location).attr('href',"../pages/cabinet.php");
         return false;
     }
-    ash = getUrlParameter("hash");
+    hash = getUrlParameter("hash");
     $.ajax({
         url: "../api/recovery/check-hash.php",
         type : "POST",
@@ -15,6 +15,7 @@ $("html").ready(function () {
             console.log(result)
         },
         error : function(result) {
+            $(location).attr('href',"../");
             console.log(result)
         }
     })
@@ -24,17 +25,18 @@ $(document).on("submit", "#recovery-form", function () {
     let form_data = $(this).serializeObject();
     form_data.hash = hash;
     form_data = JSON.stringify(form_data);
+    console.log(form_data);
     $.ajax({
         url: "../api/recovery/recovery-password.php",
         type : "POST",
         contentType : 'application/json',
         data : form_data,
         success : function(result) {
-            loginForm();
-            printMessage("success",result.message);
+            $(location).attr('href',"../");
         },
         error : function(result) {
             printMessage("error",result.responseJSON.message);
+            console.log(result);
         }
     })
     return false;
@@ -51,17 +53,3 @@ $(document).on("hash-success", function () {
 });
 
 
-var getUrlParameter = function getUrlParameter(sParam) {
-    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-        sURLVariables = sPageURL.split('&'),
-        sParameterName,
-        i;
-
-    for (i = 0; i < sURLVariables.length; i++) {
-        sParameterName = sURLVariables[i].split('=');
-
-        if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : sParameterName[1];
-        }
-    }
-};

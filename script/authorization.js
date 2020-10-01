@@ -51,7 +51,6 @@ $(document).on("submit", "#register-form", function () {
 
 $(document).on("submit", "#restore-form", function () {
     let email = $("#restore-form > input[name = 'email']").val();
-    alert(email)
     $.ajax({
         url: "../api/recovery/send.php",
         type : "POST",

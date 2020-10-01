@@ -27,6 +27,8 @@ class Comment
         }
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
+            $link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ?
+                    "https" : "http") . "://" . $_SERVER['HTTP_HOST'];
             $res = $user->find($user_id);
             array_push($comments,array(
                 "id" => $id,
@@ -38,7 +40,7 @@ class Comment
                 "user" => array(
                     "first_name" => $res["first_name"],
                     "second_name" => $res["second_name"],
-                    "image" => ($res["image"] != null) ? URL . "/api/user-data/" . $res["image"] . "/user-imag.jpg" : null
+                    "image" => ($res["image"] != null) ? $link . "/api/user-data/" . $res["image"] . "/user-imag.jpg" : null
                 )
             )) ;
         }

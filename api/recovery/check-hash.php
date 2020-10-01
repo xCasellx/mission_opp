@@ -15,7 +15,7 @@ if($res) {
     http_response_code(201);
     echo json_encode(array(
         "status" => "success",
-        "hash" => $hash
+        "hash" => $data->hash
     ));
     exit;
 }

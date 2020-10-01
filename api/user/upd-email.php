@@ -9,7 +9,7 @@ $database = new Database();
 $db = $database->getConnection();
 $user = new User($db);
 
-$res = $user->recoveryPassword($data->password,$data->confirm_password,$data->hash);
+$res = $user->updateEmail($data->hash, $data->id, $config_jwt);
 
 if($res["status"] === "error") {
     http_response_code(401);
@@ -18,10 +18,3 @@ if($res["status"] === "error") {
 }
 http_response_code(201);
 echo json_encode($res);
-
-
-
-
-
-
-

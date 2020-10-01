@@ -6,7 +6,8 @@ let first_name,
     date,
     image,
     number,
-    user_id;
+    user_id,
+    email_confirm;
 
 $("html").ready(function () {
     let jwt=getCookie("jwt");
@@ -23,8 +24,9 @@ $("html").ready(function () {
                 date = result.jwt.date;
                 town = result.jwt.town;
                 email = result.jwt.email;
-                image  =result.jwt.image;
+                image  = result.jwt.image;
                 user_id = result.jwt.id;
+                email_confirm = result.jwt.email_confirm;
                 $(document).trigger('load_data');
             },
             error : function(result) {

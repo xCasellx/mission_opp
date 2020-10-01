@@ -11,9 +11,9 @@ $db = $database->getConnection();
 $user = new User($db);
 $data = json_decode(file_get_contents("php://input"));
 
-$user_data = $user->validate($data->jwt, $key);
+$user_data = $user->validate($data->jwt, $config_jwt["key"]);
 $res=$user->update($data->edit_name , $data->edit_text, $data->password, $data->confirm_password,
-                    $user_data["jwt"]->id, $key, $iss, $aud, $iat, $nbf);
+                    $user_data["jwt"]->id, $config_jwt);
 
 if($res["status"] === "error") {
     http_response_code(400);
